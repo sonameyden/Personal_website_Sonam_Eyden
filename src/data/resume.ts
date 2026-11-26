@@ -171,3 +171,99 @@ export const calibration = {
     { gauge: 'Toritor', copilot: 0.92, sceua: 0.9 },
   ],
 };
+
+// Diagrams on the work pages. Every label comes from MASTER_FACTS.md (or the
+// project's own public README description).
+export type Tone = 'plain' | 'aqua' | 'blue' | 'violet';
+export interface FlowNode {
+  title: string;
+  note?: string;
+  tone?: Tone;
+}
+export interface FlowStage {
+  label: string;
+  nodes: FlowNode[];
+}
+export interface BeforeAfterRow {
+  label: string;
+  before: number;
+  after: number;
+  beforeText: string;
+  afterText: string;
+}
+export type Diagram =
+  | { kind: 'flow'; label: string; caption: string; stages: FlowStage[] }
+  | { kind: 'bars'; caption: string; rows: BeforeAfterRow[] };
+
+export const diagrams: Record<string, Diagram> = {
+  'calibration-co-pilot': {
+    kind: 'flow',
+    label: 'How one calibration step runs',
+    caption:
+      'How one calibration step runs. Steps repeat within a fixed simulation budget (100 simulations in the preliminary hourly runs), and every run is logged so it can be resumed.',
+    stages: [
+      { label: 'Propose', nodes: [{ title: 'LLM expert agents', note: 'diagnostician, process experts, critic', tone: 'violet' }] },
+      { label: 'Select', nodes: [{ title: 'Contextual bandit', note: 'chooses which expert proposes next', tone: 'violet' }] },
+      { label: 'Optimise', nodes: [{ title: 'Trust-region Bayesian optimisation', note: 'with an LLM prior', tone: 'violet' }] },
+      { label: 'Simulate', nodes: [{ title: 'RS Minerve', note: 'GSM-SOCONT, Punatsangchu basin' }] },
+      {
+        label: 'Check',
+        nodes: [
+          { title: 'Plausibility rules', note: 'physical limits on every proposal', tone: 'aqua' },
+          { title: 'Prediction check', note: 'each LLM prediction against the simulation' },
+        ],
+      },
+    ],
+  },
+  toursync: {
+    kind: 'bars',
+    caption:
+      'Before and after the performance work on TourSync. Redundant queries were removed with batched loaders, and unchanged output was proved by diffing 83 API responses.',
+    rows: [
+      { label: 'Slowest pages', before: 62, after: 0.7, beforeText: '62 s', afterText: '< 0.7 s' },
+      { label: 'Database queries on one page', before: 1227, after: 42, beforeText: '1,227', afterText: '42' },
+      { label: 'Opening a new database connection', before: 5000, after: 50, beforeText: '5 s', afterText: '≈ 50 ms' },
+    ],
+  },
+  drukserenity: {
+    kind: 'flow',
+    label: 'How DrukSerenity handles a message',
+    caption:
+      'How a message moves through DrukSerenity. Independent specialists run in parallel; a crisis goes straight to an emergency path; the guardrail checks every reply before it is sent. Evaluated on 542 synthetic messages: 100% crisis precision.',
+    stages: [
+      { label: 'In', nodes: [{ title: 'Message', note: 'Dzongkha or English' }] },
+      { label: 'Route', nodes: [{ title: 'Orchestrator', note: 'crisis → emergency path', tone: 'aqua' }] },
+      {
+        label: 'Specialists, in parallel',
+        nodes: [
+          { title: 'Emotion', tone: 'blue' },
+          { title: 'Crisis', tone: 'blue' },
+          { title: 'RAG', note: '977 proverbs, 22 documents', tone: 'blue' },
+          { title: 'Resource', tone: 'blue' },
+          { title: 'Conversational', tone: 'blue' },
+        ],
+      },
+      { label: 'Check', nodes: [{ title: 'Guardrail agent', note: 'diagnosis, boundary, harm, privacy; rewrites unsafe replies', tone: 'aqua' }] },
+      { label: 'Out', nodes: [{ title: 'Reply', note: 'streamed over SSE' }] },
+    ],
+  },
+  'document-intake-agent': {
+    kind: 'flow',
+    label: 'How the Document Intake Agent processes a document',
+    caption:
+      'The Google ADK workflow on Gemini. On 60 test documents: 60 / 60 fields and decisions correct, 0 false accepts.',
+    stages: [
+      { label: 'In', nodes: [{ title: 'Invoice or receipt', note: 'PDF, scan or phone photo' }] },
+      { label: 'Extract', nodes: [{ title: 'Extractor agent', tone: 'blue' }] },
+      { label: 'Validate', nodes: [{ title: 'Validator agent', note: 'checks the ERP API through tools', tone: 'blue' }] },
+      {
+        label: 'Review',
+        nodes: [
+          { title: 'Reviewer agent', tone: 'blue' },
+          { title: 'Code guardrail', note: 'blocks closed-PO invoices', tone: 'aqua' },
+        ],
+      },
+      { label: 'Decide', nodes: [{ title: 'Accept', tone: 'aqua' }, { title: 'Route to a person' }] },
+    ],
+  },
+};

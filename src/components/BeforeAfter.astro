@@ -1,0 +1,156 @@
+---
+import type { BeforeAfterRow } from '../data/resume';
+
+// Before/after bars: each "after" bar starts at full length and shrinks to its
+// real size when scrolled into view, so the visitor watches the speed-up.
+interface Props {
+  rows: BeforeAfterRow[];
+  caption: string;
+}
+const { rows, caption } = Astro.props;
+const pct = (r: BeforeAfterRow) => Math.max(1.2, (r.after / r.before) * 100);
+---
+
+<figure class="ba" data-reveal>
+  <div class="rows">
+    {
+      rows.map((r, i) => (
+        <div class="row" style={`--i:${i}`}>
+          <p class="what">{r.label}</p>
+          <div class="bar-line">
+            <span class="tag">Before</span>
+            <span class="track">
+              <span class="bar before" />
+            </span>
+            <span class="val num muted">{r.beforeText}</span>
+          </div>
+          <div class="bar-line">
+            <span class="tag">After</span>
+            <span class="track">
+              <span class="bar after" style={`--w:${pct(r)}%`} />
+            </span>
+            <span class="val num">{r.afterText}</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <figcaption>{caption}</figcaption>
+
+  <div class="visually-hidden">
+    <table>
+      <caption>Before and after</caption>
+      <thead><tr><th>Measure</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        {rows.map((r) => <tr><td>{r.label}</td><td>{r.beforeText}</td><td>{r.afterText}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+</figure>
+
+<style>
+  .ba {
+    padding: var(--space-6);
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .rows {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .row + .row {
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .what {
+    font-size: 0.9375rem;
+    color: var(--text);
+    margin-bottom: var(--space-2);
+  }
+
+  .bar-line {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) 6.5rem;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 1.75rem;
+  }
+
+  .tag {
+    font-size: 0.8125rem;
+    color: var(--faint);
+  }
+
+  .track {
+    position: relative;
+    height: 10px;
+  }
+
+  .bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 999px;
+  }
+
+  .bar.before {
+    width: 100%;
+    background: var(--line-strong);
+  }
+
+  .bar.after {
+    width: var(--w);
+    background: var(--aqua);
+    transition: width 1.6s var(--ease-out);
+    transition-delay: calc(0.35s + var(--i) * 0.2s);
+  }
+
+  :global(.can-reveal) .ba:not(.in-view) .bar.after {
+    width: 100%;
+  }
+
+  .val {
+    font-size: 0.9375rem;
+    color: var(--aqua);
+    white-space: nowrap;
+  }
+
+  .val.muted {
+    color: var(--muted);
+  }
+
+  figcaption {
+    margin-top: var(--space-5);
+    color: var(--faint);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    max-width: 75ch;
+  }
+
+  @media (max-width: 720px) {
+    .ba {
+      padding: var(--space-5) var(--space-4);
+    }
+
+    .bar-line {
+      grid-template-columns: 3rem minmax(0, 1fr) 5.25rem;
+      gap: var(--space-2);
+    }
+  }
+
+  @media print {
+    .ba {
+      break-inside: avoid;
+      background: none;
+    }
+
+    .bar.after {
+      width: var(--w) !important;
+    }
+  }
+</style>

@@ -36,7 +36,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
         <li><a class="primary" href={`mailto:${person.email}`}>Email me <Arrow /></a></li>
         <li><a href={person.github}>GitHub <Arrow /></a></li>
         <li><a href={person.linkedin}>LinkedIn <Arrow /></a></li>
-        <li class="no-print"><button type="button" data-print>Save resume as PDF</button></li>
+        <li class="no-print"><a href={url('sonam-eyden-resume.pdf')} download>Resume (PDF) <Arrow /></a></li>
       </ul>
     </div>
   </header>
@@ -188,16 +188,13 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     <ul class="links">
       <li><a href={person.github}>GitHub <Arrow /></a></li>
       <li><a href={person.linkedin}>LinkedIn <Arrow /></a></li>
+      <li class="no-print"><a href={url('sonam-eyden-resume.pdf')} download>Resume (PDF) <Arrow /></a></li>
     </ul>
     <p class="fine">© 2026 {person.name}</p>
   </footer>
 </Base>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('[data-print]').forEach((b) =>
-    b.addEventListener('click', () => window.print()),
-  );
-
   // Experience timeline: the rail runs from the first dot to the last; its fill
   // follows a reading line 60% down the screen, and each dot lights up as the
   // fill reaches it. Without motion the rail is simply full.

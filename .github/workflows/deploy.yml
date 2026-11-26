@@ -19,7 +19,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: withastro/action@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx astro build
+
+      # Print the resume page to a PDF so the download always matches the site.
+      - name: Generate resume PDF
+        run: |
+          npx astro preview --port 4321 --host 127.0.0.1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4321/Personal_website_Sonam_Eyden/resume/ >/dev/null && break; sleep 1; done
+          node scripts/make-pdf.mjs http://127.0.0.1:4321/Personal_website_Sonam_Eyden/resume/ dist/sonam-eyden-resume.pdf
+          kill %1 || true
+          test -s dist/sonam-eyden-resume.pdf
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
   deploy:
     needs: build

@@ -15,6 +15,30 @@
         "value": "#000",
         "createdAt": "2026-11-26T08:51:04.337Z",
         "reason": "Agent: #000 appears only as an alpha stop in CSS mask-image gradients (flow field fades), never as a rendered colour"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "scripts/og.html"
+        ],
+        "createdAt": "2026-11-26T14:30:13.093Z",
+        "reason": "Agent: og.html renders a fixed 1200x630 social image; pixel sizes are scaled to the image, not the web type ramp"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "scripts/og.html"
+        ],
+        "createdAt": "2026-11-26T14:30:13.656Z",
+        "reason": "Agent: og.html renders a fixed 1200x630 social image; pixel sizes are scaled to the image, not the web type ramp"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-11-26T14:33:31.302Z",
+        "reason": "Agent: Geist is the documented system face in DESIGN.md (owner accepted the recommended direction); the resume page reuses it"
       }
     ]
   }

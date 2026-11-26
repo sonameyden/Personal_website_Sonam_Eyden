@@ -291,6 +291,15 @@ The site's background: one fixed canvas behind every page. It has 84 streamlines
 - **Still:** under reduced motion it draws one still frame of the lines alone at 30% opacity.
 - Hidden in print.
 
+### Flow Diagram
+On work pages, a pipeline of stages inside the figure panel (surface at 88%, hairline border, 10px radius). It runs left to right on desktop and top to bottom below 900px. Each stage has a faint label above raised-indigo nodes (1px strong-hairline border, 10px radius): a bold title and an optional muted note. A node's border takes the role's hue at 50% (blue for engineering steps, violet for research, aqua for checks and outcomes); aqua nodes also set their title in aqua. Stages are joined by 2px connectors with a small arrowhead; a soft aqua light travels along each connector (2.6s loop, offset per stage), the diagram's one looping motion, which stops under reduced motion. Stages arrive one after another (140ms stagger) when scrolled into view. A caption underneath states the result.
+
+### Before/After Bars
+On TourSync's page, three measures, each with a full-length strong-hairline "before" bar and an aqua "after" bar (10px, pill ends), the values in mono at the right. The after bars start at full length and shrink to their true size on view (1.6s, staggered), so the speed-up is watched rather than read. A visually hidden table carries the values.
+
+### Printable Resume
+A separate light document page (`/resume/`) that the deploy prints to a two-page A4 PDF on every push. Geist on white, ink text, muted body, and section headings in small tracked caps in print blue (`#1f4fd1`), over a thin rule; a teal (`#0b6e66`) bullet marker. It is drawn from the same content data as the site and never carries the phone number. The site's other print styles still turn any page into a clean light print.
+
 ### Motion
 One easing for the whole system: exponential ease-out, cubic-bezier(0.16, 1, 0.3, 1). The hero's four intro elements rise 14px out of a 6px blur over 1s with 80ms stagger; the case header does the same once at 0.9s. As you scroll, content blocks reveal once (0.9s, 80ms stagger within a list), each kind differently:
 - Rows and blocks rise 22px.

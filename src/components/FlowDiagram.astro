@@ -1,0 +1,246 @@
+---
+import type { FlowStage } from '../data/resume';
+
+// A left-to-right pipeline (top-to-bottom on phones): stages joined by
+// connectors that carry a slow travelling light, the same motion as the
+// background lines. Stages arrive one after another when scrolled into view.
+interface Props {
+  stages: FlowStage[];
+  caption: string;
+  label: string;
+}
+const { stages, caption, label } = Astro.props;
+---
+
+<figure class="flowfig" data-reveal aria-label={label}>
+  <ol class="stages">
+    {
+      stages.map((st, i) => (
+        <li class="stage" style={`--i:${i}`}>
+          <p class="stage-label">{st.label}</p>
+          <ul class="nodes">
+            {st.nodes.map((n) => (
+              <li class="node" data-tone={n.tone ?? 'plain'}>
+                <strong>{n.title}</strong>
+                {n.note && <span>{n.note}</span>}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ol>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+  .flowfig {
+    --gap: 2.75rem;
+    padding: var(--space-6);
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .stages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--gap);
+    align-items: center;
+  }
+
+  .stage {
+    position: relative;
+    display: grid;
+    gap: var(--space-2);
+    transition:
+      opacity 0.7s var(--ease-out),
+      transform 0.7s var(--ease-out);
+    transition-delay: calc(var(--i) * 140ms);
+  }
+
+  /* Connector into each stage after the first, with light travelling along it. */
+  .stage + .stage::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--gap) + 0.4rem);
+    width: calc(var(--gap) - 0.8rem);
+    top: calc(50% + 0.7rem);
+    height: 2px;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, transparent 0 35%, var(--aqua) 50%, transparent 65%) 0 0 / 300% 100% no-repeat,
+      var(--line-strong);
+    animation: travel-x 2.6s linear infinite;
+    animation-delay: calc(var(--i) * 0.3s);
+  }
+
+  .stage + .stage::after {
+    content: '';
+    position: absolute;
+    left: -0.55rem;
+    top: calc(50% + 0.7rem - 4px);
+    border: 5px solid transparent;
+    border-left: 6px solid var(--line-strong);
+    border-right: 0;
+  }
+
+  @keyframes travel-x {
+    from {
+      background-position:
+        100% 0,
+        0 0;
+    }
+    to {
+      background-position:
+        -50% 0,
+        0 0;
+    }
+  }
+
+  @keyframes travel-y {
+    from {
+      background-position:
+        0 100%,
+        0 0;
+    }
+    to {
+      background-position:
+        0 -50%,
+        0 0;
+    }
+  }
+
+  .stage-label {
+    font-size: 0.8125rem;
+    color: var(--faint);
+  }
+
+  .nodes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .node {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    line-height: 1.35;
+  }
+
+  .node strong {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .node span {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .node[data-tone='blue'] {
+    border-color: color-mix(in oklab, var(--blue) 50%, var(--line));
+  }
+
+  .node[data-tone='violet'] {
+    border-color: color-mix(in oklab, var(--violet) 50%, var(--line));
+  }
+
+  .node[data-tone='aqua'] {
+    border-color: color-mix(in oklab, var(--aqua) 55%, var(--line));
+  }
+
+  .node[data-tone='aqua'] strong {
+    color: var(--aqua);
+  }
+
+  figcaption {
+    margin-top: var(--space-5);
+    color: var(--faint);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    max-width: 75ch;
+  }
+
+  :global(.can-reveal) .flowfig:not(.in-view) .stage {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  /* Phones and narrow screens: the pipeline runs top to bottom. */
+  @media (max-width: 900px) {
+    .flowfig {
+      --gap: 2.25rem;
+      padding: var(--space-5) var(--space-4);
+    }
+
+    .stages {
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
+      align-items: stretch;
+    }
+
+    .nodes {
+      grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    }
+
+    .stage + .stage::before {
+      left: 1.25rem;
+      top: calc(-1 * var(--gap) + 0.35rem);
+      width: 2px;
+      height: calc(var(--gap) - 0.9rem);
+      background:
+        linear-gradient(180deg, transparent 0 35%, var(--aqua) 50%, transparent 65%) 0 0 / 100% 300% no-repeat,
+        var(--line-strong);
+      animation-name: travel-y;
+    }
+
+    .stage + .stage::after {
+      left: calc(1.25rem - 4px);
+      top: -0.6rem;
+      border: 5px solid transparent;
+      border-top: 6px solid var(--line-strong);
+      border-bottom: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stage + .stage::before {
+      animation: none;
+      background: var(--line-strong);
+    }
+  }
+
+  :global(html.still) .stage + .stage::before {
+    animation: none;
+    background: var(--line-strong);
+  }
+
+  @media print {
+    .flowfig {
+      break-inside: avoid;
+      background: none;
+    }
+
+    .stage {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .stage + .stage::before {
+      animation: none;
+      background: var(--line-strong);
+    }
+  }
+</style>

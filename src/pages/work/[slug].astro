@@ -2,7 +2,9 @@
 import Base from '../../layouts/Base.astro';
 import Arrow from '../../components/Arrow.astro';
 import CalibrationFigure from '../../components/CalibrationFigure.astro';
-import { person, work, type Work } from '../../data/resume';
+import FlowDiagram from '../../components/FlowDiagram.astro';
+import BeforeAfter from '../../components/BeforeAfter.astro';
+import { person, work, diagrams, type Work } from '../../data/resume';
 import { url } from '../../lib/url';
 
 export function getStaticPaths() {
@@ -13,6 +15,7 @@ const { w } = Astro.props as { w: Work };
 const i = work.findIndex((x) => x.slug === w.slug);
 const next = work[(i + 1) % work.length];
 const trackName = { research: 'Research', engineering: 'Engineering' } as const;
+const diagram = diagrams[w.slug];
 ---
 
 <Base title={`${w.title} · ${person.name}`} description={w.summary} flowDensity={0.6} flowQuiet>
@@ -38,7 +41,27 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
   </div>
 
   <main id="main" class="wrap case" data-track={w.track}>
-    {w.slug === 'calibration-co-pilot' && <div class="figure"><CalibrationFigure /></div>}
+    {
+      diagram && (
+        <section class="figure" aria-labelledby="diagram-title">
+          <h2 id="diagram-title">{diagram.kind === 'flow' ? 'How it works' : 'Before and after'}</h2>
+          {diagram.kind === 'flow' ? (
+            <FlowDiagram stages={diagram.stages} caption={diagram.caption} label={diagram.label} />
+          ) : (
+            <BeforeAfter rows={diagram.rows} caption={diagram.caption} />
+          )}
+        </section>
+      )
+    }
+
+    {
+      w.slug === 'calibration-co-pilot' && (
+        <section class="figure" aria-labelledby="results-title">
+          <h2 id="results-title">Results so far</h2>
+          <CalibrationFigure />
+        </section>
+      )
+    }
 
     <div class="body">
       <section aria-labelledby="what" data-r>

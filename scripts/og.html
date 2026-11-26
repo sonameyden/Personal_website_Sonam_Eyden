@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Social preview card</title>
+<!-- Source for public/og.png (1200x630). Regenerate with: npm run og -->
+<style>
+  @font-face { font-family: 'Geist Variable'; src: url('../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'Geist Mono Variable'; src: url('../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
+  :root { --bg: #0b1020; --text: #e7ebf6; --muted: #a1abc7; --faint: #7d88a8; --line: #222c4c; --aqua: #5ee0d0; --blue: #7aa0ff; --violet: #b7a0ff; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; background: var(--bg); overflow: hidden; }
+  body { font-family: 'Geist Variable', sans-serif; color: var(--text); position: relative; }
+  canvas { position: absolute; inset: 0; width: 1200px; height: 630px;
+    -webkit-mask-image: linear-gradient(100deg, transparent 22%, #000 62%); mask-image: linear-gradient(100deg, transparent 22%, #000 62%); }
+  .card { position: absolute; inset: 0; padding: 84px 88px; display: flex; flex-direction: column; }
+  h1 { font-size: 104px; font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+  .role { margin-top: 26px; font-size: 38px; font-weight: 500; letter-spacing: -0.01em; }
+  .role span { color: var(--faint); padding: 0 0.25em; }
+  .thesis { margin-top: 18px; font-size: 27px; color: var(--muted); max-width: 22em; line-height: 1.4; }
+  .foot { margin-top: auto; display: flex; gap: 44px; align-items: baseline; }
+  .m { display: grid; gap: 4px; }
+  .m b { font-family: 'Geist Mono Variable', monospace; font-weight: 500; font-size: 30px; color: var(--aqua); letter-spacing: -0.01em; }
+  .m i { font-style: normal; font-size: 17px; color: var(--muted); }
+  .rule { position: absolute; left: 88px; right: 88px; bottom: 64px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--aqua), var(--blue) 50%, var(--violet)); opacity: 0.85; }
+</style>
+</head>
+<body>
+<canvas id="c" width="2400" height="1260"></canvas>
+<div class="card">
+  <h1>Sonam Eyden</h1>
+  <p class="role">AI engineer &amp; researcher <span>·</span> Bhutan</p>
+  <p class="thesis">Building AI systems for real problems in Bhutan, and measuring whether they work.</p>
+  <div class="foot">
+    <div class="m"><b>0.747 → 0.861</b><i>calibration NSE</i></div>
+    <div class="m"><b>62 s → &lt;0.7 s</b><i>slowest pages</i></div>
+    <div class="m"><b>100%</b><i>crisis precision</i></div>
+  </div>
+</div>
+<div class="rule"></div>
+<script>
+  // Same flow field as the site background, one still frame with light dashes.
+  const c = document.getElementById('c'), ctx = c.getContext('2d');
+  ctx.scale(2, 2);
+  const w = 1200, h = 630;
+  let s = 7; const rand = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
+  const g = ctx.createLinearGradient(w * 0.3, 0, w, h * 0.7);
+  g.addColorStop(0, '#5ee0d0'); g.addColorStop(0.5, '#7aa0ff'); g.addColorStop(1, '#b7a0ff');
+  const t = 0.9, px = w * 0.78, py = h * 0.38;
+  const angle = (x, y) => {
+    let a = 0.25 + 0.85 * Math.sin(x * 0.0017 + t) * Math.cos(y * 0.0023 - t * 0.7) + 0.35 * Math.sin((x + y) * 0.0011 - t * 0.4);
+    const dx = x - px, dy = y - py, d2 = dx * dx + dy * dy, r = 190;
+    if (d2 < r * r) { const f = 1 - Math.sqrt(d2) / r; a += f * f * 1.4 * (dy >= 0 ? 1 : -1); }
+    return a;
+  };
+  const paths = [];
+  for (let k = 0; k < 90; k++) {
+    const u = rand(), v = rand();
+    let x = w * (0.15 + 0.9 * Math.sqrt(u)) - w * 0.1, y = h * v * v * 1.15 - h * 0.05;
+    const p = new Path2D(); p.moveTo(x, y);
+    for (let i = 0; i < 100; i++) { const a = angle(x, y); x += Math.cos(a) * 9; y += Math.sin(a) * 9; p.lineTo(x, y); if (x > w + 40 || y > h + 40 || y < -40) break; }
+    paths.push(p);
+  }
+  ctx.strokeStyle = g; ctx.lineCap = 'round';
+  ctx.globalAlpha = 0.22; ctx.lineWidth = 1; paths.forEach((p) => ctx.stroke(p));
+  ctx.globalAlpha = 0.8; ctx.lineWidth = 1.5; ctx.setLineDash([22, 200]); ctx.lineDashOffset = -40; paths.forEach((p) => ctx.stroke(p));
+  document.body.dataset.ready = '1';
+</script>
+</body>
+</html>

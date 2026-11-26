@@ -1,0 +1,213 @@
+---
+interface Props {
+  /** Share of the full line count to draw (1 on the home hero). */
+  density?: number;
+}
+const { density = 1 } = Astro.props;
+// Fine streamlines of a slow-moving flow field, in the aqua → blue → violet
+// blend. Light travels along the lines; the lines bend gently around the
+// pointer. Draws one still frame under prefers-reduced-motion and pauses when
+// off-screen or in a background tab.
+---
+
+<canvas class="flow" aria-hidden="true" data-flow data-density={density}></canvas>
+
+<style>
+  .flow {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.6s var(--ease-out);
+    -webkit-mask-image: linear-gradient(100deg, transparent 8%, #000 52%),
+      linear-gradient(to bottom, #000 60%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(100deg, transparent 8%, #000 52%),
+      linear-gradient(to bottom, #000 60%, transparent);
+    mask-composite: intersect;
+  }
+
+  .flow.is-ready {
+    opacity: 1;
+  }
+
+  @media (max-width: 720px) {
+    .flow {
+      -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 85%);
+      mask-image: linear-gradient(to bottom, #000 30%, transparent 85%);
+      opacity: 0;
+    }
+
+    .flow.is-ready {
+      opacity: 0.55;
+    }
+  }
+
+  @media print {
+    .flow {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-flow]');
+  const ctx = canvas?.getContext('2d');
+
+  if (canvas && ctx) {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const still = document.documentElement.classList.contains('still');
+    const reduce = { get matches() { return still || mq.matches; } };
+    const host = canvas.parentElement as HTMLElement;
+    let w = 0;
+    let h = 0;
+    let seeds: { x: number; y: number }[] = [];
+    let gradient: CanvasGradient | null = null;
+    let raf = 0;
+    let visible = true;
+    const pointer = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
+    const STEPS = 90;
+    const STEP = 9;
+
+    // Deterministic pseudo-random so the composition is the same every visit.
+    let s = 7;
+    const rand = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = host.clientWidth;
+      h = host.clientHeight;
+      canvas!.width = Math.round(w * dpr);
+      canvas!.height = Math.round(h * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      gradient = ctx!.createLinearGradient(w * 0.25, 0, w, h * 0.6);
+      gradient.addColorStop(0, '#5ee0d0');
+      gradient.addColorStop(0.5, '#7aa0ff');
+      gradient.addColorStop(1, '#b7a0ff');
+
+      // Seeds lean to the top-right, where the field is densest.
+      const density = Number(canvas!.dataset.density || 1);
+      const count = Math.round((w < 720 ? 38 : 78) * density);
+      s = 7;
+      seeds = Array.from({ length: count }, () => {
+        const u = rand();
+        const v = rand();
+        return { x: w * (0.15 + 0.9 * Math.sqrt(u)) - w * 0.1, y: h * v * v * 1.1 - h * 0.05 };
+      });
+    }
+
+    function angle(x: number, y: number, t: number) {
+      let a =
+        0.25 +
+        0.85 * Math.sin(x * 0.0017 + t) * Math.cos(y * 0.0023 - t * 0.7) +
+        0.35 * Math.sin((x + y) * 0.0011 - t * 0.4);
+      const dx = x - pointer.x;
+      const dy = y - pointer.y;
+      const d2 = dx * dx + dy * dy;
+      const r = 190;
+      if (d2 < r * r) {
+        const k = 1 - Math.sqrt(d2) / r;
+        a += k * k * 1.4 * (dy >= 0 ? 1 : -1);
+      }
+      return a;
+    }
+
+    function trace(t: number) {
+      const paths: Path2D[] = [];
+      for (const seed of seeds) {
+        const p = new Path2D();
+        let x = seed.x;
+        let y = seed.y;
+        p.moveTo(x, y);
+        for (let i = 0; i < STEPS; i++) {
+          const a = angle(x, y, t);
+          x += Math.cos(a) * STEP;
+          y += Math.sin(a) * STEP;
+          p.lineTo(x, y);
+          if (x > w + 40 || y > h + 40 || y < -40) break;
+        }
+        paths.push(p);
+      }
+      return paths;
+    }
+
+    function draw(time: number) {
+      const t = time * 0.00004;
+      pointer.x += (pointer.tx - pointer.x) * 0.08;
+      pointer.y += (pointer.ty - pointer.y) * 0.08;
+
+      ctx!.clearRect(0, 0, w, h);
+      const paths = trace(t);
+      ctx!.lineCap = 'round';
+      ctx!.strokeStyle = gradient!;
+
+      const still = reduce.matches;
+      ctx!.globalAlpha = still ? 0.3 : 0.16;
+      ctx!.lineWidth = 1;
+      ctx!.setLineDash([]);
+      for (const p of paths) ctx!.stroke(p);
+      // Without motion, the travelling light would freeze into dashes; draw the lines alone.
+      if (still) {
+        ctx!.globalAlpha = 1;
+        return;
+      }
+
+      ctx!.globalAlpha = 0.75;
+      ctx!.lineWidth = 1.4;
+      ctx!.setLineDash([22, 260]);
+      ctx!.lineDashOffset = -time * 0.05;
+      for (const p of paths) ctx!.stroke(p);
+      ctx!.globalAlpha = 1;
+    }
+
+    function loop(time: number) {
+      draw(time);
+      raf = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
+    }
+
+    function start() {
+      cancelAnimationFrame(raf);
+      if (reduce.matches) {
+        draw(0);
+      } else {
+        raf = requestAnimationFrame(loop);
+      }
+    }
+
+    resize();
+    start();
+    requestAnimationFrame(() => canvas.classList.add('is-ready'));
+
+    new ResizeObserver(() => {
+      resize();
+      if (reduce.matches || !raf) draw(0);
+    }).observe(host);
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !raf && !reduce.matches) start();
+    }).observe(canvas);
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && visible && !reduce.matches) start();
+    });
+    mq.addEventListener('change', start);
+
+    host.addEventListener('pointermove', (e) => {
+      const r = host.getBoundingClientRect();
+      pointer.tx = e.clientX - r.left;
+      pointer.ty = e.clientY - r.top;
+      if (pointer.x < -9000) {
+        pointer.x = pointer.tx;
+        pointer.y = pointer.ty;
+      }
+    });
+    host.addEventListener('pointerleave', () => {
+      pointer.tx = -9999;
+      pointer.ty = -9999;
+    });
+  }
+</script>

@@ -1,0 +1,287 @@
+---
+import { calibration } from '../data/resume';
+
+// Dot plot of calibration NSE on a shared axis. Values come from the CV only.
+const min = 0.7;
+const max = 0.95;
+const pct = (v: number) => ((v - min) / (max - min)) * 100;
+const ticks = [0.7, 0.75, 0.8, 0.85, 0.9, 0.95];
+const { setup, preliminary } = calibration;
+---
+
+<figure class="fig" data-reveal>
+  <div class="rows">
+    <div class="row">
+      <div class="label">
+        <span>{setup.gauge}</span>
+        <small>model set-up fixed</small>
+      </div>
+      <div class="lane">
+        <span class="span-line" style={`--a:${pct(setup.before)}%;--b:${pct(setup.after)}%`}></span>
+        <span class="dot base" style={`--x:${pct(setup.before)}%`}><b class="num">{setup.before.toFixed(3)}</b></span>
+        <span class="dot aqua" style={`--x:${pct(setup.after)}%`}><b class="num">{setup.after.toFixed(3)}</b></span>
+      </div>
+    </div>
+    {
+      preliminary.map((r) => (
+        <div class="row">
+          <div class="label">
+            <span>{r.gauge}</span>
+            <small>hourly model, preliminary</small>
+          </div>
+          <div class="lane">
+            <span class="span-line" style={`--a:${pct(r.sceua)}%;--b:${pct(r.copilot)}%`} />
+            <span class="dot base" style={`--x:${pct(r.sceua)}%`}>
+              <b class="num below">{r.sceua.toFixed(2)}</b>
+            </span>
+            <span class="dot violet" style={`--x:${pct(r.copilot)}%`}>
+              <b class="num">{r.copilot.toFixed(2)}</b>
+            </span>
+          </div>
+        </div>
+      ))
+    }
+    <div class="row axis" aria-hidden="true">
+      <div class="label"><small>NSE</small></div>
+      <div class="lane">
+        {ticks.map((t) => <span class="tick num" style={`--x:${pct(t)}%`}>{t.toFixed(2)}</span>)}
+      </div>
+    </div>
+  </div>
+
+  <ul class="legend">
+    <li><span class="key base"></span>Before fix / SCE-UA</li>
+    <li><span class="key aqua"></span>After set-up fix</li>
+    <li><span class="key violet"></span>LLM-guided co-pilot</li>
+  </ul>
+
+  <figcaption>
+    Calibration NSE (higher is better). Top: fixing cold-start states and a missing high-elevation rainfall
+    correction, before any optimisation. Below: preliminary results with a 100-simulation budget, co-pilot over two
+    seeds against SCE-UA over one; validation is mixed and more seeds are running.
+  </figcaption>
+
+  <table class="visually-hidden">
+    <caption>Calibration NSE values</caption>
+    <thead><tr><th>Case</th><th>Baseline or SCE-UA</th><th>After fix or co-pilot</th></tr></thead>
+    <tbody>
+      <tr><td>{setup.gauge}, model set-up fixed</td><td>{setup.before}</td><td>{setup.after}</td></tr>
+      {preliminary.map((r) => <tr><td>{r.gauge}, preliminary</td><td>{r.sceua}</td><td>{r.copilot}</td></tr>)}
+    </tbody>
+  </table>
+</figure>
+
+<style>
+  .fig {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--space-6) var(--space-6) var(--space-5);
+  }
+
+  .rows {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 4.25rem;
+  }
+
+  .row + .row:not(.axis) {
+    border-top: 1px solid var(--line);
+  }
+
+  .label {
+    display: grid;
+    line-height: 1.3;
+  }
+
+  .label small {
+    color: var(--faint);
+    font-size: 0.8125rem;
+  }
+
+  .lane {
+    position: relative;
+    height: 2.5rem;
+    margin-inline: 1.25rem;
+  }
+
+  .span-line {
+    position: absolute;
+    top: 50%;
+    left: var(--a);
+    width: calc(var(--b) - var(--a));
+    height: 2px;
+    margin-top: -1px;
+    background: var(--line-strong);
+    transform-origin: left;
+    transition: transform 1.1s var(--ease-out) 0.35s;
+  }
+
+  :global(.can-reveal) .fig:not(.in-view) .span-line {
+    transform: scaleX(0);
+  }
+
+  .dot {
+    position: absolute;
+    top: 50%;
+    left: var(--x);
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 50%;
+    transition:
+      opacity 0.6s var(--ease-out),
+      transform 1.1s var(--ease-out);
+  }
+
+  .dot.base {
+    border: 2px solid var(--muted);
+    background: var(--surface);
+  }
+
+  .dot.aqua {
+    background: var(--aqua);
+    transition-delay: 0.3s;
+  }
+
+  .dot.violet {
+    background: var(--violet);
+    transition-delay: 0.3s;
+  }
+
+  .dot b {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    transform: translateX(-50%);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .dot b.below {
+    bottom: auto;
+    top: calc(100% + 6px);
+    color: var(--muted);
+  }
+
+  .dot.base b:not(.below) {
+    color: var(--muted);
+  }
+
+  :global(.can-reveal) .fig:not(.in-view) .dot {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+
+  .axis {
+    min-height: 2rem;
+    border-top: 1px solid var(--line-strong);
+    padding-top: var(--space-2);
+  }
+
+  .axis .lane {
+    height: 1.25rem;
+  }
+
+  .tick {
+    position: absolute;
+    left: var(--x);
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--faint);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-5) 0 var(--space-3);
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  .legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .key {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .key.base {
+    border: 2px solid var(--muted);
+  }
+
+  .key.aqua {
+    background: var(--aqua);
+  }
+
+  .key.violet {
+    background: var(--violet);
+  }
+
+  figcaption {
+    color: var(--faint);
+    font-size: var(--step--1);
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+
+  @media (max-width: 720px) {
+    .fig {
+      padding: var(--space-5) var(--space-4);
+    }
+
+    .row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+      padding-block: var(--space-3);
+    }
+
+    .axis .label {
+      display: none;
+    }
+
+    .lane {
+      margin: 1.5rem 1rem 0.75rem;
+    }
+
+    .axis .lane {
+      margin-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot,
+    .span-line {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media print {
+    .dot {
+      opacity: 1;
+      transform: none;
+    }
+
+    .span-line {
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,392 @@
+---
+import Base from '../../layouts/Base.astro';
+import Arrow from '../../components/Arrow.astro';
+import FlowField from '../../components/FlowField.astro';
+import CalibrationFigure from '../../components/CalibrationFigure.astro';
+import { person, work, type Work } from '../../data/resume';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+  return work.map((w) => ({ params: { slug: w.slug }, props: { w } }));
+}
+
+const { w } = Astro.props as { w: Work };
+const i = work.findIndex((x) => x.slug === w.slug);
+const next = work[(i + 1) % work.length];
+const trackName = { research: 'Research', engineering: 'Engineering' } as const;
+---
+
+<Base title={`${w.title} · ${person.name}`} description={w.summary}>
+  <div class="top" data-track={w.track}>
+    <FlowField density={0.45} />
+    <nav class="nav wrap no-print" aria-label="Site">
+      <a class="back" href={url("#work")}><Arrow /> {person.name}</a>
+      <a href={`mailto:${person.email}`}>Email</a>
+    </nav>
+
+    <header class="wrap head">
+      <h1>{w.title}</h1>
+      <p class="byline">
+        <span class="track" data-track={w.track}>{trackName[w.track]}</span>
+        <span>{w.context}</span>
+        <span class="dates">{w.period}</span>
+      </p>
+      <p class="summary">{w.summary}</p>
+      <p class="result">
+        <span class="value num">{w.result.value}</span>
+        <span class="label">{w.result.label}</span>
+      </p>
+    </header>
+  </div>
+
+  <main id="main" class="wrap case" data-track={w.track}>
+    {w.slug === 'calibration-co-pilot' && <div class="figure" data-reveal><CalibrationFigure /></div>}
+
+    <div class="body">
+      <section aria-labelledby="what">
+        <h2 id="what">What I did</h2>
+        <ul class="steps">
+          {w.points.map((p) => <li><p>{p}</p></li>)}
+        </ul>
+        {w.note && <p class="note">{w.note}</p>}
+      </section>
+
+      <aside class="facts" aria-label="Details">
+        <dl>
+          <div>
+            <dt>Stack</dt>
+            <dd>{w.stack.join(' · ')}</dd>
+          </div>
+          {
+            w.links && (
+              <div>
+                <dt>Links</dt>
+                <dd class="links">
+                  {w.links.map((l) => (
+                    <a href={l.href}>
+                      {l.label} <Arrow />
+                    </a>
+                  ))}
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+      </aside>
+    </div>
+
+    <a class="next no-print" href={url(`work/${next.slug}/`)}>
+      <span>Next</span>
+      <strong>{next.title}</strong>
+      <Arrow />
+    </a>
+  </main>
+</Base>
+
+<script>
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.querySelector('.fig')?.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      }),
+    { threshold: 0.2 },
+  );
+  document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+</script>
+
+<style>
+  .top {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .top :global(.flow) {
+    z-index: -1;
+  }
+
+  /* Keep the lines clear of the header text column on wide screens. */
+  @media (min-width: 721px) {
+    .top :global(.flow) {
+      -webkit-mask-image: linear-gradient(100deg, transparent 50%, #000 78%),
+        linear-gradient(to bottom, #000 60%, transparent);
+      mask-image: linear-gradient(100deg, transparent 50%, #000 78%),
+        linear-gradient(to bottom, #000 60%, transparent);
+    }
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    padding-block: var(--space-5);
+    font-size: 0.9375rem;
+  }
+
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav a:hover {
+    color: var(--text);
+  }
+
+  .back :global(svg) {
+    width: 0.9em;
+    height: 0.9em;
+    transform: rotate(-135deg);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .back:hover :global(svg) {
+    transform: rotate(-135deg) translate(3px, -3px);
+  }
+
+  .head {
+    padding-block: clamp(2.5rem, 8vh, 5rem) var(--space-8);
+    animation: rise 0.9s var(--ease-out) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(6px);
+    }
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    max-width: 16ch;
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-5);
+    color: var(--text);
+    font-size: 0.9375rem;
+  }
+
+  .dates {
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .summary {
+    margin-top: var(--space-4);
+    color: var(--muted);
+    font-size: var(--step-1);
+    max-width: 52ch;
+  }
+
+  .result {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: var(--space-7);
+  }
+
+  .value {
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    color: var(--aqua);
+    font-weight: 500;
+    line-height: 1.05;
+  }
+
+  .label {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .case {
+    padding-bottom: var(--space-9);
+  }
+
+  .figure {
+    margin-bottom: var(--space-8);
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(14rem, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--line);
+  }
+
+  h2 {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-5);
+  }
+
+  .steps {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .steps li {
+    position: relative;
+    padding-left: 2rem;
+    color: var(--muted);
+  }
+
+  .steps li::before {
+    content: '';
+    position: absolute;
+    left: 0.55rem;
+    top: 0.68rem;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  .case[data-track='research'] .steps li::before {
+    background: var(--violet);
+  }
+
+  .note {
+    margin-top: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid color-mix(in oklab, var(--violet) 35%, var(--line));
+    background: color-mix(in oklab, var(--violet) 7%, var(--bg));
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+  }
+
+  .facts {
+    position: sticky;
+    top: var(--space-6);
+  }
+
+  .facts dl {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .facts dl > div {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .facts dl > div:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  dt {
+    font-size: 0.8125rem;
+    color: var(--faint);
+    margin-bottom: var(--space-2);
+  }
+
+  dd {
+    font-size: 0.9375rem;
+  }
+
+  .links {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .links a {
+    position: relative;
+    display: inline-flex;
+    gap: 0.35em;
+    align-items: center;
+    justify-self: start;
+    text-decoration: none;
+    padding-bottom: 2px;
+    background: linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat;
+  }
+
+  .links a::after,
+  .next::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--flow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .links a:hover::after,
+  .next:hover::after,
+  .next:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .links :global(svg) {
+    width: 0.8em;
+    height: 0.8em;
+  }
+
+  .next {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-top: var(--space-9);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+  }
+
+  .next span {
+    color: var(--faint);
+    font-size: 0.875rem;
+  }
+
+  .next strong {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  .next :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--aqua);
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .next:hover :global(svg) {
+    transform: translate(3px, -3px);
+  }
+
+  @media (max-width: 900px) {
+    .body {
+      grid-template-columns: 1fr;
+      gap: var(--space-7);
+    }
+
+    .facts {
+      position: static;
+    }
+  }
+
+  @media print {
+    .head {
+      animation: none;
+      padding-block: 0 14pt;
+    }
+  }
+</style>

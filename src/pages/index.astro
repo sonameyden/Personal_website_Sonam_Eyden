@@ -1,0 +1,872 @@
+---
+import Base from '../layouts/Base.astro';
+import FlowField from '../components/FlowField.astro';
+import CalibrationFigure from '../components/CalibrationFigure.astro';
+import Arrow from '../components/Arrow.astro';
+import {
+  person,
+  work,
+  experience,
+  publications,
+  moreProjects,
+  skills,
+  education,
+} from '../data/resume';
+import { url } from '../lib/url';
+
+const trackName = { research: 'Research', engineering: 'Engineering' } as const;
+---
+
+<Base>
+  <header class="hero">
+    <FlowField />
+    <nav class="nav wrap no-print" aria-label="Sections">
+      <a class="home" href="#top">{person.name}</a>
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#research">Research</a></li>
+        <li class="hide-sm"><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="intro wrap" id="top">
+      <h1 class="reveal">{person.name}</h1>
+      <p class="role reveal">{person.role} <span aria-hidden="true">·</span> {person.place}</p>
+      <p class="thesis reveal">{person.thesis}</p>
+      <ul class="links reveal" aria-label="Contact">
+        <li><a class="primary" href={`mailto:${person.email}`}>Email me <Arrow /></a></li>
+        <li><a href={person.github}>GitHub <Arrow /></a></li>
+        <li><a href={person.linkedin}>LinkedIn <Arrow /></a></li>
+        <li class="no-print"><button type="button" data-print>Save resume as PDF</button></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="work wrap" id="work" aria-labelledby="work-title">
+      <div class="section-head">
+        <h2 id="work-title">Selected work</h2>
+        <p>Each piece of work with the number that shows it worked.</p>
+      </div>
+      <ol class="ledger">
+        {
+          work.map((w) => (
+            <li>
+              <a class="row" href={url(`work/${w.slug}/`)} data-track={w.track}>
+                <div class="what">
+                  <h3>{w.title}</h3>
+                  <p>{w.summary}</p>
+                  <p class="byline">
+                    <span class="track" data-track={w.track}>{trackName[w.track]}</span>
+                    <span class="period">{w.period}</span>
+                  </p>
+                </div>
+                <div class="result">
+                  <span class="value num">{w.result.value}</span>
+                  <span class="label">{w.result.label}</span>
+                </div>
+                <span class="go" aria-hidden="true"><Arrow /></span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="section research wrap" id="research" aria-labelledby="research-title">
+      <div class="section-head">
+        <h2 id="research-title">Research</h2>
+        <p>LLM- and agent-guided optimisation of scientific models; NLP for low-resource languages; ML for climate hazards.</p>
+      </div>
+      <div class="research-grid">
+        <div class="prose">
+          <h3>Can domain knowledge make hydrological calibration more efficient and physically meaningful?</h3>
+          <p>
+            Calibration methods such as SCE-UA search on objective scores alone, and different parameter sets can fit
+            similarly while behaving very differently inside the model. I am testing whether LLM expert agents with
+            hydrological knowledge, paired with Bayesian optimisation, can reach good fits in fewer simulations and
+            stay physically plausible, on the Punatsangchu basin model I rebuilt during my DHI-DRIVE internship.
+          </p>
+          <a class="more" href={url("work/calibration-co-pilot/")}>How the co-pilot works <Arrow /></a>
+        </div>
+        <CalibrationFigure />
+      </div>
+
+      <h3 class="sub" id="publications">Publications and talks</h3>
+      <ul class="pubs">
+        {
+          publications.map((p) => (
+            <li>
+              <h4>{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h4>
+              <p>{p.venue}</p>
+              <p class="also">
+                {p.also}
+                {p.code && <span> · <a href={p.code}>Code</a></span>}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section wrap" id="experience" aria-labelledby="experience-title">
+      <div class="section-head">
+        <h2 id="experience-title">Experience</h2>
+        <p>Engineering contracts and research, alongside full-time study.</p>
+      </div>
+      <ol class="timeline">
+        {
+          experience.map((r) => (
+            <li data-track={r.track}>
+              <span class="when">{r.period}</span>
+              <div>
+                <h3>{r.title}</h3>
+                <p class="org">{r.org}</p>
+                <p class="line">{r.line}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="section wrap" aria-labelledby="more-title">
+      <div class="section-head">
+        <h2 id="more-title">More projects</h2>
+      </div>
+      <ul class="more-list">
+        {
+          moreProjects.map((p) => (
+            <li>
+              <span class="year">{p.year}</span>
+              <div>
+                <h3>{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h3>
+                <p>{p.line}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section wrap split" aria-label="Skills and education">
+      <div>
+        <h2 class="h2">Skills</h2>
+        <dl class="skills">
+          {
+            skills.map((g) => (
+              <div>
+                <dt>{g.group}</dt>
+                <dd>{g.items.join(' · ')}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div>
+        <h2 class="h2">Education</h2>
+        <div class="edu">
+          <h3>{education.degree}</h3>
+          <p class="org">{education.school}</p>
+          <p class="when">{education.period}</p>
+          <p>{education.note}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="contact wrap" id="contact">
+    <h2>Get in touch</h2>
+    <p>Open to research internships and AI engineering roles.</p>
+    <a class="mail" href={`mailto:${person.email}`}>{person.email}</a>
+    <ul class="links">
+      <li><a href={person.github}>GitHub <Arrow /></a></li>
+      <li><a href={person.linkedin}>LinkedIn <Arrow /></a></li>
+    </ul>
+    <p class="fine">© 2026 {person.name}</p>
+  </footer>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-print]').forEach((b) =>
+    b.addEventListener('click', () => window.print()),
+  );
+
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      }),
+    { threshold: 0.2 },
+  );
+  document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    padding-bottom: var(--space-7);
+  }
+
+  .hero :global(.flow) {
+    z-index: -1;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--space-5);
+    font-size: 0.9375rem;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: var(--space-5);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav a:hover,
+  .nav .home {
+    color: var(--text);
+  }
+
+  .nav .home {
+    font-weight: 600;
+  }
+
+  .intro {
+    padding-top: clamp(3rem, 9vh, 6.5rem);
+  }
+
+  h1 {
+    font-size: var(--step-display);
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
+  .role {
+    margin-top: var(--space-4);
+    font-size: var(--step-2);
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .role span {
+    color: var(--faint);
+    padding-inline: 0.2em;
+  }
+
+  .thesis {
+    margin-top: var(--space-3);
+    max-width: 40ch;
+    font-size: var(--step-1);
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-6) 0 0;
+  }
+
+  .links a,
+  .links button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font: inherit;
+    font-size: 0.9875rem;
+    color: var(--text);
+    text-decoration: none;
+    background: none;
+    border: 0;
+    padding: 0.35rem 0;
+    cursor: pointer;
+    border-bottom: 1px solid var(--line-strong);
+    transition: border-color 0.2s;
+  }
+
+  .links a:hover,
+  .links button:hover {
+    border-color: var(--aqua);
+  }
+
+  .links .primary {
+    padding: 0.6rem 1.05rem;
+    border: 1px solid color-mix(in oklab, var(--aqua) 50%, var(--line-strong));
+    border-radius: 999px;
+    background: var(--surface-2);
+    transition:
+      background 0.3s,
+      border-color 0.3s;
+  }
+
+  .links .primary:hover,
+  .links .primary:focus-visible {
+    border-color: transparent;
+    background:
+      linear-gradient(color-mix(in oklab, var(--surface-2) 78%, var(--blue)), color-mix(in oklab, var(--surface-2) 78%, var(--blue))) padding-box,
+      var(--flow) border-box;
+  }
+
+  .links :global(svg) {
+    width: 0.85em;
+    height: 0.85em;
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  .links a:hover :global(svg) {
+    transform: translate(2px, -2px);
+  }
+
+  .reveal {
+    animation: rise 1s var(--ease-out) both;
+  }
+
+  .reveal:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+  .reveal:nth-child(3) {
+    animation-delay: 0.16s;
+  }
+
+  .reveal:nth-child(4) {
+    animation-delay: 0.24s;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+    }
+  }
+
+  /* Selected work ledger */
+  .work .section-head {
+    margin-bottom: var(--space-4);
+  }
+
+  .ledger {
+    list-style: none;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 17rem) 1.5rem;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-5) var(--space-4);
+    margin-inline: calc(-1 * var(--space-4));
+    border-top: 1px solid var(--line);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s var(--ease-out);
+  }
+
+  .row::after {
+    content: '';
+    position: absolute;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: -1px;
+    height: 1px;
+    background: var(--flow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .row:hover {
+    background: color-mix(in oklab, var(--surface) 80%, transparent);
+  }
+
+  .row:hover::after,
+  .row:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .what .byline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-3);
+  }
+
+  .period {
+    font-size: 0.8125rem;
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .what h3 {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+  }
+
+  .what p {
+    margin-top: var(--space-1);
+    color: var(--muted);
+    font-size: 0.9875rem;
+    max-width: 62ch;
+  }
+
+  .result {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .value {
+    font-size: var(--step-2);
+    font-weight: 500;
+    color: var(--aqua);
+    white-space: nowrap;
+  }
+
+  .result .label {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .go {
+    color: var(--faint);
+    transition:
+      transform 0.35s var(--ease-out),
+      color 0.2s;
+  }
+
+  .go :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .row:hover .go {
+    color: var(--aqua);
+    transform: translate(3px, -3px);
+  }
+
+  /* Research */
+  .research-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .prose h3 {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  .prose p {
+    margin-top: var(--space-4);
+    color: var(--muted);
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    margin-top: var(--space-5);
+    color: var(--violet);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--violet) 40%, transparent);
+  }
+
+  .more:hover {
+    border-color: var(--violet);
+  }
+
+  .more :global(svg) {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
+  .sub {
+    margin: var(--space-8) 0 var(--space-4);
+    font-size: var(--step-1);
+  }
+
+  .pubs {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .pubs li {
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .pubs h4 {
+    margin: 0;
+    font-size: var(--step-1);
+    font-weight: 500;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .pubs a {
+    position: relative;
+    text-decoration: none;
+  }
+
+  .pubs .also a {
+    color: var(--text);
+    background: linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat;
+  }
+
+  .pubs p {
+    margin-top: var(--space-2);
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .pubs .also {
+    margin-top: 0;
+    color: var(--faint);
+  }
+
+  /* Experience timeline */
+  .timeline {
+    position: relative;
+    list-style: none;
+    padding: 0 0 0 var(--space-6);
+  }
+
+  .timeline::before,
+  .timeline::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    width: 1px;
+    background: var(--line-strong);
+  }
+
+  .timeline::after {
+    background: var(--blue);
+    transform-origin: top;
+  }
+
+  @supports (animation-timeline: view()) {
+    .timeline::after {
+      animation: fill linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 70%;
+    }
+
+    @keyframes fill {
+      from {
+        transform: scaleY(0);
+      }
+    }
+  }
+
+  .timeline li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: var(--space-5);
+    padding-block: var(--space-4);
+  }
+
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-6));
+    top: 1.35rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--blue);
+    z-index: 1;
+  }
+
+  .timeline li[data-track='research']::before {
+    border-color: var(--violet);
+  }
+
+  .when {
+    font-size: 0.8125rem;
+    color: var(--faint);
+    padding-top: 0.3rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timeline h3 {
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+  }
+
+  .org {
+    color: var(--text);
+    opacity: 0.85;
+    font-size: 0.9375rem;
+    margin-top: 0.15rem;
+  }
+
+  .line {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    margin-top: var(--space-1);
+    max-width: 64ch;
+  }
+
+  /* More projects */
+  .more-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .more-list li {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: var(--space-5);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .year {
+    color: var(--faint);
+    font-size: 0.8125rem;
+    padding-top: 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .more-list h3 {
+    font-size: var(--step-1);
+  }
+
+  .more-list h3 a {
+    position: relative;
+    text-decoration: none;
+    background: linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat;
+  }
+
+  .more-list p {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    margin-top: var(--space-1);
+  }
+
+  /* Skills and education */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+
+  .h2 {
+    font-size: var(--step-3);
+    letter-spacing: -0.025em;
+    margin-bottom: var(--space-5);
+  }
+
+  .skills {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .skills div {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .skills dt {
+    color: var(--faint);
+    font-size: 0.875rem;
+    padding-top: 0.1rem;
+  }
+
+  .skills dd {
+    color: var(--text);
+    font-size: 0.9875rem;
+  }
+
+  .edu {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .edu h3 {
+    font-size: var(--step-1);
+  }
+
+  .edu .when {
+    padding-top: var(--space-2);
+  }
+
+  .edu p:last-child {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    margin-top: var(--space-3);
+  }
+
+  /* Contact */
+  .contact {
+    margin-top: var(--space-9);
+    padding-block: var(--space-8) var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .contact h2 {
+    font-size: var(--step-3);
+    letter-spacing: -0.025em;
+  }
+
+  .contact > p {
+    color: var(--muted);
+    margin-top: var(--space-2);
+  }
+
+  .mail {
+    position: relative;
+    display: inline-block;
+    margin-top: var(--space-5);
+    font-size: clamp(1.35rem, 0.9rem + 2.2vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background: linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat;
+    padding-bottom: 0.15rem;
+  }
+
+  /* The signature hairline: aqua to violet, drawn in on hover. */
+  .mail::after,
+  .pubs h4 a::after,
+  .pubs .also a::after,
+  .more-list h3 a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--flow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .mail:hover::after,
+  .mail:focus-visible::after,
+  .pubs a:hover::after,
+  .pubs a:focus-visible::after,
+  .more-list h3 a:hover::after,
+  .more-list h3 a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .fine {
+    margin-top: var(--space-8);
+    font-size: 0.8125rem;
+    color: var(--faint);
+  }
+
+  @media (max-width: 900px) {
+    .research-grid,
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hide-sm {
+      display: none;
+    }
+
+    .nav ul {
+      gap: var(--space-4);
+    }
+
+    .row {
+      grid-template-columns: minmax(0, 1fr) 1.25rem;
+      gap: var(--space-3) var(--space-4);
+    }
+
+    .result {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .go {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+    }
+
+    .timeline li,
+    .more-list li,
+    .skills div {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+
+  @media print {
+    .hero {
+      padding-bottom: 0;
+    }
+
+    .intro {
+      padding-top: 0;
+    }
+
+    h1 {
+      font-size: 26pt;
+    }
+
+    .reveal {
+      animation: none;
+    }
+
+    .row {
+      padding-block: 8pt;
+      break-inside: avoid;
+    }
+
+    .go {
+      display: none;
+    }
+
+    .timeline li,
+    .pubs li {
+      break-inside: avoid;
+    }
+  }
+</style>

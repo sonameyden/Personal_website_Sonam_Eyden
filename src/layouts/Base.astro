@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import { person } from '../data/resume';
+import { url } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${person.name} · ${person.role}`,
+  description = person.thesis,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0b1020" />
+    <link rel="icon" href={url("favicon.svg")} type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      // ?still renders the page fully drawn with no motion (used for screenshots and review).
+      if (new URLSearchParams(location.search).has('still')) {
+        document.documentElement.classList.add('still');
+      } else if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('can-reveal');
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip no-print" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>

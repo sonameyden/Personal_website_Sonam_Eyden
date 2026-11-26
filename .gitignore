@@ -1,0 +1,17 @@
+# Build output and dependencies
+node_modules/
+dist/
+.astro/
+
+# Private source material: CVs carry the phone number, research documents are not public.
+# Only the merged fact sheet (no phone number) is committed.
+resume-source/*
+!resume-source/MASTER_FACTS.md
+
+# Local-only settings and Impeccable working files
+.claude/settings.local.json
+.impeccable/config.local.json
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/hook.cache.json

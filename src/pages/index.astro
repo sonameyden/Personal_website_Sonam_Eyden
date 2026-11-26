@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import CalibrationFigure from '../components/CalibrationFigure.astro';
 import Arrow from '../components/Arrow.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import {
   person,
   work,
@@ -17,18 +18,23 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
 ---
 
 <Base>
+  <SiteHeader />
   <header class="hero">
-    <nav class="nav wrap no-print" aria-label="Sections">
-      <a class="home" href="#top">{person.name}</a>
-      <ul>
-        <li><a href="#work">Work</a></li>
-        <li><a href="#research">Research</a></li>
-        <li class="hide-sm"><a href="#experience">Experience</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-
     <div class="intro wrap" id="top">
+      <figure class="portrait">
+        <picture>
+          <source type="image/webp" srcset={`${url('img/sonam-eyden-360.webp')} 360w, ${url('img/sonam-eyden-720.webp')} 720w`} sizes="(max-width: 720px) 104px, 300px" />
+          <img
+            src={url('img/sonam-eyden-720.jpg')}
+            srcset={`${url('img/sonam-eyden-360.jpg')} 360w, ${url('img/sonam-eyden-720.jpg')} 720w`}
+            sizes="(max-width: 720px) 104px, 300px"
+            width="720"
+            height="900"
+            alt={`Portrait of ${person.name}`}
+            fetchpriority="high"
+          />
+        </picture>
+      </figure>
       <h1 class="reveal">{person.name}</h1>
       <p class="role reveal">{person.role} <span aria-hidden="true">·</span> {person.place}</p>
       <p class="thesis reveal">{person.thesis}</p>
@@ -258,39 +264,48 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     padding-bottom: var(--space-7);
   }
 
-  .nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-block: var(--space-5);
-    font-size: 0.9375rem;
-  }
-
-  .nav ul {
-    display: flex;
-    gap: var(--space-5);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .nav a {
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .nav a:hover,
-  .nav .home {
-    color: var(--text);
-  }
-
-  .nav .home {
-    font-weight: 600;
-  }
-
   .intro {
-    padding-top: clamp(3rem, 9vh, 6.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-8);
+    align-items: start;
+    padding-top: clamp(2rem, 6vh, 4.5rem);
+  }
+
+  .intro > :not(.portrait) {
+    grid-column: 1;
+  }
+
+  /* The portrait sits top-right in the flow field; it develops into view once. */
+  .portrait {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    width: clamp(220px, 22vw, 300px);
+    margin: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    animation: develop 1.4s var(--ease-out) 0.15s both;
+  }
+
+  .portrait img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  @keyframes develop {
+    from {
+      clip-path: inset(100% 0 0 0 round var(--radius));
+      filter: saturate(0.4) brightness(0.8);
+    }
+    to {
+      clip-path: inset(0 0 0 0 round var(--radius));
+      filter: none;
+    }
   }
 
   h1 {
@@ -384,15 +399,15 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     animation: rise 1s var(--ease-out) both;
   }
 
-  .reveal:nth-child(2) {
+  .role.reveal {
     animation-delay: 0.08s;
   }
 
-  .reveal:nth-child(3) {
+  .thesis.reveal {
     animation-delay: 0.16s;
   }
 
-  .reveal:nth-child(4) {
+  .links.reveal {
     animation-delay: 0.24s;
   }
 
@@ -910,12 +925,16 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
   }
 
   @media (max-width: 720px) {
-    .hide-sm {
-      display: none;
+    .intro {
+      grid-template-columns: 1fr;
+      padding-top: var(--space-4);
     }
 
-    .nav ul {
-      gap: var(--space-4);
+    .portrait {
+      grid-column: 1;
+      grid-row: auto;
+      width: 104px;
+      margin-bottom: var(--space-5);
     }
 
     .row {
@@ -949,6 +968,10 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
 
     .intro {
       padding-top: 0;
+    }
+
+    .portrait {
+      display: none;
     }
 
     h1 {

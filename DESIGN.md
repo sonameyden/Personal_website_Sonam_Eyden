@@ -265,9 +265,12 @@ Inline links inside lists (publication titles, more-projects titles, case-page l
 A small dot plus a word ("Research", "Engineering") at 0.875rem in the track colour, used in ledger bylines and case-page bylines. Never uppercase, never above a heading.
 
 ### Navigation
-- **Home:** the name in soft white at 600 on the left; section links (Work, Research, Experience, Contact) in muted at 0.9375rem on the right, turning soft white on hover (0.2s). Experience hides below 720px.
-- **Case pages:** a back link with a reversed arrow on the left, Email on the right, same treatment.
+- **Home:** a sticky header. At the top of the page it sits on the ground with no fill. Once you scroll it takes a 94% navy ground with a hairline beneath, hides while you scroll down, and slides back (0.45s) as soon as you scroll up or tab into it. The name in soft white at 600 sits on the left and the section links in muted on the right; the section being read is soft white with the signature hairline beneath. Below 720px the links fold into a menu button (two drawn strokes that cross into an ×), which opens a full-width list with hairline separators and includes the resume PDF; Esc or choosing a link closes it. Anchored sections keep 5rem clear above them.
+- **Case pages:** a back link with a reversed arrow on the left, Email on the right.
 - Hidden in print. A skip link (raised indigo, 10px radius) appears on focus.
+
+### Portrait
+The owner's photograph in the first screen. On desktop it sits top-right, beside the intro, at 220–300px wide; below 720px it sits above the name at 104px. It is 4:5 with a 10px radius and a 1px strong-hairline frame, with no glow and no ring, and the flow lines run behind it. On load it develops once: a clip reveals it upward while it comes up from desaturated (1.4s). It is served as WebP with a JPEG fallback at 360 and 720px, and hidden in print.
 
 ### Experience Timeline
 A 2px rail on the left that runs exactly from the first node's centre to the last. Its fill, the aqua→blue→violet blend running top to bottom, follows a reading line 60% down the screen, and each 14px node lights up (hollow to filled, 85% to full size) as the fill reaches it: blue for engineering, violet for research, aqua for the current role. Ongoing roles come first and carry an aqua "Now" pill beside the date; the rest are ordered by end date, newest first. Each entry has the date in the 9.5rem column, then title, org and a muted line; titles of roles with a work page are ruled links to it. Entries are separated by faint hairlines. Without motion, in print or without JavaScript, the rail is full and every node filled.

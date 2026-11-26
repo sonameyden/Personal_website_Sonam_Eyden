@@ -62,6 +62,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Anchored sections land clear of the sticky header. */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
 body {
   margin: 0;
   overflow-x: clip;

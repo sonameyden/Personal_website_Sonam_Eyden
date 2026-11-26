@@ -185,7 +185,7 @@ A near-monochrome midnight-indigo ramp with three cool, light accents, each assi
 ### Named Rules
 **The Three Roles Rule.** Aqua means measured or clickable, blue means engineering, violet means research. A new element takes an accent only if it carries one of those meanings; otherwise it is neutral.
 
-**The Blend Is Motion Rule.** The aqua→blue→violet blend (`--flow`) is only ever a line that moves or draws: the flow-field streamlines and 1px hairlines that scale in from the left on hover or focus (ledger rows, ruled links, the contact email, "Next", and the primary pill's border). It is never a fill, a text colour, or a resting state.
+**The Blend Is Motion Rule.** The aqua→blue→violet blend (`--flow`) is only ever a line that moves or draws: the flow-field streamlines, the experience timeline's scroll fill, and 1px hairlines that scale in from the left on hover or focus (ledger rows, ruled links, the contact email, "Next", and the primary pill's border). It is never a fill, a text colour, or a resting state.
 
 **The Print Swap Rule.** Every colour is a custom property, and the print stylesheet redefines all of them to a light palette (white ground, near-black text, darkened aqua, blue and violet). New colour use goes through the tokens so it prints.
 
@@ -234,14 +234,14 @@ The first viewport on the home page holds the name, role, thesis and contact row
 
 ## Elevation & Depth
 
-The system is flat. There is no `box-shadow` anywhere. Depth comes from three tonal steps (ground, surface, raised surface), 1px hairlines, and one background layer: the flow-field canvas, which sits behind the hero (and at 45% line density behind each case-page header), masked so it fades out leftward and downward before it reaches the content column. On the home page the mask clears the left 8% and reaches full strength at 52%; on case pages above 720px it clears the left half and reaches full strength at 78%, keeping the lines off the header text. Below 720px the field fades from the top and drops to 55% opacity.
+The system is flat. There is no `box-shadow` anywhere. Depth comes from three tonal steps (ground, surface, raised surface), 1px hairlines, and one background layer: the flow-field canvas, fixed behind the whole page, strongest over the first screen and quieter beneath the content. On the home page its mask clears the left 8% and reaches full strength at 52%; on case pages it clears the left half and reaches full strength at 78%, keeping the lines off the header text. Below 720px it gathers in the top-right corner.
 
 ### Named Rules
 **The Hairline, Not Shadow Rule.** Separation and emphasis use a 1px rule or a tonal step. No shadows, no glow, no blurred halos.
 
 ## Shapes
 
-Mostly square-edged: rows, lists and sections are defined by straight 1px rules rather than enclosures. Corners appear only where something is genuinely contained: the figure panel and the research note use a gently curved 10px radius; the primary Email action is a full pill; focus outlines round to 4px. Dots are the recurring small form: 8px track dots, 9px hollow timeline nodes with a 2px coloured ring, 7px list bullets, 14px chart dots, 12px legend keys.
+Mostly square-edged: rows, lists and sections are defined by straight 1px rules rather than enclosures. Corners appear only where something is genuinely contained: the figure panel and the research note use a gently curved 10px radius; the primary Email action is a full pill; focus outlines round to 4px. Dots are the recurring small form: 8px track dots, 14px timeline nodes that fill as the rail reaches them, 7px list bullets, 14px chart dots, 12px legend keys.
 
 The arrow is the one icon: a 16-unit inline SVG stroke arrow pointing up-right (1.6 stroke, round caps), in `currentColor`. It nudges 2–3px up-right on hover and is rotated −135° to point back on the case-page return link.
 
@@ -270,7 +270,7 @@ A small dot plus a word ("Research", "Engineering") at 0.875rem in the track col
 - Hidden in print. A skip link (raised indigo, 10px radius) appears on focus.
 
 ### Experience Timeline
-A 1px strong-hairline track on the left with a blue line that fills downward as the list scrolls into view (scroll-driven, where supported). Each entry has a hollow 9px node ringed in its track colour, a faint date in the 9.5rem column, then title, org and a muted line.
+A 2px rail on the left that runs exactly from the first node's centre to the last. Its fill, the aqua→blue→violet blend running top to bottom, follows a reading line 60% down the screen, and each 14px node lights up (hollow to filled, 85% to full size) as the fill reaches it: blue for engineering, violet for research, aqua for the current role. Ongoing roles come first and carry an aqua "Now" pill beside the date; the rest are ordered by end date, newest first. Each entry has the date in the 9.5rem column, then title, org and a muted line; titles of roles with a work page are ruled links to it. Entries are separated by faint hairlines. Without motion, in print or without JavaScript, the rail is full and every node filled.
 
 ### Calibration Figure
 A dot plot on a shared NSE axis inside the one contained panel: deep-indigo fill, 1px hairline border, 10px radius, padding 2rem 2rem 1.5rem. Rows are ruled; each lane joins a hollow muted "before" dot to an aqua (set-up fix) or violet (co-pilot) "after" dot with a strong-hairline span. Values sit above dots in mono. On view, span lines grow from the left and dots slide in 24px and fade (1.1s, 0.3–0.35s delay). A visually hidden table carries the same values.
@@ -282,10 +282,22 @@ A contained callout for caveats on research pages: violet-tinted ground (7%), vi
 On case pages, a sticky definition list beside the body: faint label terms above body-small values, divided by hairlines. The stack is plain text joined with middle dots, like the home Skills list; links are ruled links.
 
 ### Flow Field
-The background canvas: 78 streamlines on desktop (38 under 720px), scaled by a density factor, seeded toward the top-right from a fixed seed so the composition is identical every visit. Lines are drawn at 16% opacity with travelling light dashes at 75%; a 190px pointer radius bends them gently. It fades in over 1.6s, pauses off-screen or in background tabs, and under reduced motion draws one still frame of the lines alone at 30% opacity. Hidden in print.
+The site's background: one fixed canvas behind every page. It has 84 streamlines on desktop and 54 under 720px, scaled by a density factor (0.6 on case pages), seeded from a fixed seed so the composition is identical every visit. Desktop seeds lean to the top-right; phone seeds start off the left edge so the lines sweep across the screen.
+- **Drawing:** lines at 16% opacity (20% on phones) with travelling light dashes at 75% (85%).
+- **Movement:** a slow invisible current drifts through the upper right and bends the lines with no input; a mouse or pen takes over the current on desktop, and touch never steers it. Scrolling moves the field forward and speeds the light along the lines.
+- **Strength:** full over the first screen, settling to 32% opacity on desktop and 34% on phones once you scroll a screen's height into the content.
+- **Running:** fades in over 1.6s; phones draw at 30 fps; pauses in background tabs.
+- **Masks:** desktop clears the left 8% (left 50% on case pages); phones gather the field in a radial wash in the top-right corner, clear of the intro text.
+- **Still:** under reduced motion it draws one still frame of the lines alone at 30% opacity.
+- Hidden in print.
 
 ### Motion
-One easing for the whole system: exponential ease-out, cubic-bezier(0.16, 1, 0.3, 1). The hero's four intro elements rise 14px out of a 6px blur over 1s with 80ms stagger; the case header does the same once at 0.9s. Everything else responds to intent or view. `prefers-reduced-motion` and the `?still` URL flag both produce the fully drawn final state.
+One easing for the whole system: exponential ease-out, cubic-bezier(0.16, 1, 0.3, 1). The hero's four intro elements rise 14px out of a 6px blur over 1s with 80ms stagger; the case header does the same once at 0.9s. As you scroll, content blocks reveal once (0.9s, 80ms stagger within a list), each kind differently:
+- Rows and blocks rise 22px.
+- Section headings rise 12px out of a 6px blur.
+- Timeline entries slide in 18px from the left.
+
+They start hidden only when JavaScript has confirmed it can reveal them. Everything else responds to intent or view. `prefers-reduced-motion` and the `?still` URL flag both produce the fully drawn final state.
 
 ## Do's and Don'ts
 

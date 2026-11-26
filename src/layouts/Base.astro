@@ -1,16 +1,22 @@
 ---
 import '../styles/global.css';
+import FlowField from '../components/FlowField.astro';
 import { person } from '../data/resume';
 import { url } from '../lib/url';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Background flow lines: share of the full line count, and whether to keep them further right. */
+  flowDensity?: number;
+  flowQuiet?: boolean;
 }
 
 const {
   title = `${person.name} · ${person.role}`,
   description = person.thesis,
+  flowDensity = 1,
+  flowQuiet = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -42,6 +48,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip no-print" href="#main">Skip to content</a>
+    <FlowField density={flowDensity} quiet={flowQuiet} />
     <slot />
     <script>
       // Reveal on scroll: [data-r] blocks and [data-reveal] figures get .in-view once.

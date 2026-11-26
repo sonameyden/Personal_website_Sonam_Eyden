@@ -110,15 +110,20 @@ export interface Role {
   period: string;
   track: Track;
   line: string;
+  /** Still going on. */
+  current?: boolean;
+  /** Slug of the work page that covers this role. */
+  work?: string;
 }
 
+// Ongoing roles first, then by end date, newest first.
 export const experience: Role[] = [
-  { title: 'AI Engineer (contract, full-time)', org: 'Omdena Top Talent · Bhutan TourSync', period: 'Oct – Nov 2026', track: 'engineering', line: 'Primary developer of a production-ready government tourism platform.' },
+  { title: 'Research Intern, then Independent Researcher', org: 'DHI-DRIVE · AI for Hydrological Modelling', period: 'Dec 2025 – present', track: 'research', line: 'LLM-guided calibration of the Punatsangchu basin model; internship Dec 2025 – Feb 2026, independent since.', current: true, work: 'calibration-co-pilot' },
+  { title: 'AI Engineer (contract, full-time)', org: 'Omdena Top Talent · Bhutan TourSync', period: 'Oct – Nov 2026', track: 'engineering', line: 'Primary developer of a production-ready government tourism platform.', work: 'toursync' },
   { title: 'Full-Stack Engineer', org: 'Omdena · Smart Tourism Agentic AI Challenge', period: 'Aug 2026', track: 'engineering', line: 'Agentic AI workflows connected to backend services; the work that became TourSync.' },
   { title: 'QA Engineer, Data Systems (contract, part-time)', org: 'Omdena Top Talent · GovTech Bhutan Data Lakehouse', period: 'Feb – Jun 2026', track: 'engineering', line: 'Validated Bronze, Silver and Gold layers of a Spark lakehouse with Airflow ETL and Debezium CDC.' },
   { title: 'Full-Stack Engineer', org: 'Omdena · Druk Climate Guard', period: 'Apr – May 2026', track: 'engineering', line: 'Climate-risk dashboards combining ECMWF forecasts and GLOF predictions for farmers, hydropower operators and disaster managers.' },
-  { title: 'LLM / AI Engineer (contract, part-time)', org: 'Omdena Top Talent · DrukSerenity', period: 'Jan – Mar 2026', track: 'engineering', line: 'Multi-agent mental-health support system; published in Zorig Melong.' },
-  { title: 'Research Intern, then Independent Researcher', org: 'DHI-DRIVE · AI for Hydrological Modelling', period: 'Dec 2025 – present', track: 'research', line: 'LLM-guided calibration of the Punatsangchu basin model.' },
+  { title: 'LLM / AI Engineer (contract, part-time)', org: 'Omdena Top Talent · DrukSerenity', period: 'Jan – Mar 2026', track: 'engineering', line: 'Multi-agent mental-health support system; published in Zorig Melong.', work: 'drukserenity' },
   { title: 'ML Engineer', org: 'Omdena AI Innovation Challenge · Climate Change Bhutan', period: 'Oct – Nov 2025', track: 'research', line: 'Classified high-risk glacial lake outburst floods across 676 lakes with XGBoost: 91.2% accuracy, 0.90 precision.' },
 ];
 

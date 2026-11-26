@@ -5,8 +5,10 @@ interface Props {
 }
 const { density = 1 } = Astro.props;
 // Fine streamlines of a slow-moving flow field, in the aqua → blue → violet
-// blend. Light travels along the lines; the lines bend gently around the
-// pointer. Draws one still frame under prefers-reduced-motion and pauses when
+// blend. Light travels along the lines on its own; an invisible current
+// drifts through the field so it keeps bending without any input, a mouse
+// takes over that current on desktop, and scrolling speeds the flow a little.
+// Draws one still frame under prefers-reduced-motion and pauses when
 // off-screen or in a background tab.
 ---
 
@@ -33,15 +35,16 @@ const { density = 1 } = Astro.props;
     opacity: 1;
   }
 
+  /* Phones: the text spans the full width, so the field gathers in the
+     top-right corner and fades out before the body copy. */
   @media (max-width: 720px) {
     .flow {
-      -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 85%);
-      mask-image: linear-gradient(to bottom, #000 30%, transparent 85%);
-      opacity: 0;
+      -webkit-mask-image: radial-gradient(ellipse 95% 62% at 100% 8%, #000 30%, transparent 100%);
+      mask-image: radial-gradient(ellipse 95% 62% at 100% 8%, #000 30%, transparent 100%);
     }
 
     .flow.is-ready {
-      opacity: 0.55;
+      opacity: 0.9;
     }
   }
 
@@ -63,12 +66,16 @@ const { density = 1 } = Astro.props;
     const host = canvas.parentElement as HTMLElement;
     let w = 0;
     let h = 0;
+    let narrow = false;
     let seeds: { x: number; y: number }[] = [];
     let gradient: CanvasGradient | null = null;
     let raf = 0;
     let visible = true;
+    let mouseActive = false;
+    let scroll = 0;
+    let scrollEased = 0;
+    // The current that bends the lines: a mouse on desktop, otherwise a slow drift.
     const pointer = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
-    const STEPS = 90;
     const STEP = 9;
 
     // Deterministic pseudo-random so the composition is the same every visit.
@@ -79,50 +86,64 @@ const { density = 1 } = Astro.props;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = host.clientWidth;
       h = host.clientHeight;
+      narrow = w < 720;
       canvas!.width = Math.round(w * dpr);
       canvas!.height = Math.round(h * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      gradient = ctx!.createLinearGradient(w * 0.25, 0, w, h * 0.6);
+      gradient = ctx!.createLinearGradient(narrow ? 0 : w * 0.25, 0, w, h * 0.6);
       gradient.addColorStop(0, '#5ee0d0');
       gradient.addColorStop(0.5, '#7aa0ff');
       gradient.addColorStop(1, '#b7a0ff');
 
-      // Seeds lean to the top-right, where the field is densest.
       const density = Number(canvas!.dataset.density || 1);
-      const count = Math.round((w < 720 ? 38 : 78) * density);
       s = 7;
-      seeds = Array.from({ length: count }, () => {
-        const u = rand();
-        const v = rand();
-        return { x: w * (0.15 + 0.9 * Math.sqrt(u)) - w * 0.1, y: h * v * v * 1.1 - h * 0.05 };
-      });
+      if (narrow) {
+        // Start lines off the left edge so they sweep across the whole screen.
+        const count = Math.round(54 * density);
+        seeds = Array.from({ length: count }, () => {
+          const u = rand();
+          const v = rand();
+          return { x: w * (u * 1.3 - 0.6), y: h * (v * 0.75 - 0.1) };
+        });
+      } else {
+        // Seeds lean to the top-right, where the field is densest.
+        const count = Math.round(78 * density);
+        seeds = Array.from({ length: count }, () => {
+          const u = rand();
+          const v = rand();
+          return { x: w * (0.15 + 0.9 * Math.sqrt(u)) - w * 0.1, y: h * v * v * 1.1 - h * 0.05 };
+        });
+      }
     }
 
     function angle(x: number, y: number, t: number) {
+      // Scale the field to the screen so narrow screens get the same curvature.
+      const k = narrow ? 2.2 : 1;
       let a =
         0.25 +
-        0.85 * Math.sin(x * 0.0017 + t) * Math.cos(y * 0.0023 - t * 0.7) +
-        0.35 * Math.sin((x + y) * 0.0011 - t * 0.4);
+        0.85 * Math.sin(x * 0.0017 * k + t) * Math.cos(y * 0.0023 * k - t * 0.7) +
+        0.35 * Math.sin((x + y) * 0.0011 * k - t * 0.4);
       const dx = x - pointer.x;
       const dy = y - pointer.y;
       const d2 = dx * dx + dy * dy;
-      const r = 190;
+      const r = narrow ? 150 : 190;
       if (d2 < r * r) {
-        const k = 1 - Math.sqrt(d2) / r;
-        a += k * k * 1.4 * (dy >= 0 ? 1 : -1);
+        const f = 1 - Math.sqrt(d2) / r;
+        a += f * f * 1.4 * (dy >= 0 ? 1 : -1);
       }
       return a;
     }
 
     function trace(t: number) {
       const paths: Path2D[] = [];
+      const steps = narrow ? 110 : 90;
       for (const seed of seeds) {
         const p = new Path2D();
         let x = seed.x;
         let y = seed.y;
         p.moveTo(x, y);
-        for (let i = 0; i < STEPS; i++) {
+        for (let i = 0; i < steps; i++) {
           const a = angle(x, y, t);
           x += Math.cos(a) * STEP;
           y += Math.sin(a) * STEP;
@@ -135,30 +156,42 @@ const { density = 1 } = Astro.props;
     }
 
     function draw(time: number) {
-      const t = time * 0.00004;
-      pointer.x += (pointer.tx - pointer.x) * 0.08;
-      pointer.y += (pointer.ty - pointer.y) * 0.08;
+      // Scrolling nudges the field forward, eased so it never jumps.
+      scrollEased += (scroll - scrollEased) * 0.08;
+      const t = time * (narrow ? 0.00006 : 0.00004) + scrollEased * 0.0009;
+
+      if (!mouseActive) {
+        // A slow current drifting through the upper right of the field.
+        pointer.tx = w * (0.62 + 0.28 * Math.sin(time * 0.00021));
+        pointer.ty = h * (0.3 + 0.2 * Math.sin(time * 0.00017 + 1.3));
+      }
+      if (pointer.x < -9000) {
+        pointer.x = pointer.tx;
+        pointer.y = pointer.ty;
+      }
+      pointer.x += (pointer.tx - pointer.x) * 0.06;
+      pointer.y += (pointer.ty - pointer.y) * 0.06;
 
       ctx!.clearRect(0, 0, w, h);
       const paths = trace(t);
       ctx!.lineCap = 'round';
       ctx!.strokeStyle = gradient!;
 
-      const still = reduce.matches;
-      ctx!.globalAlpha = still ? 0.3 : 0.16;
+      const isStill = reduce.matches;
+      ctx!.globalAlpha = isStill ? 0.3 : narrow ? 0.2 : 0.16;
       ctx!.lineWidth = 1;
       ctx!.setLineDash([]);
       for (const p of paths) ctx!.stroke(p);
       // Without motion, the travelling light would freeze into dashes; draw the lines alone.
-      if (still) {
+      if (isStill) {
         ctx!.globalAlpha = 1;
         return;
       }
 
-      ctx!.globalAlpha = 0.75;
-      ctx!.lineWidth = 1.4;
-      ctx!.setLineDash([22, 260]);
-      ctx!.lineDashOffset = -time * 0.05;
+      ctx!.globalAlpha = narrow ? 0.85 : 0.75;
+      ctx!.lineWidth = narrow ? 1.6 : 1.4;
+      ctx!.setLineDash(narrow ? [26, 200] : [22, 260]);
+      ctx!.lineDashOffset = -time * 0.05 - scrollEased * 0.6;
       for (const p of paths) ctx!.stroke(p);
       ctx!.globalAlpha = 1;
     }
@@ -170,6 +203,7 @@ const { density = 1 } = Astro.props;
 
     function start() {
       cancelAnimationFrame(raf);
+      raf = 0;
       if (reduce.matches) {
         draw(0);
       } else {
@@ -181,7 +215,12 @@ const { density = 1 } = Astro.props;
     start();
     requestAnimationFrame(() => canvas.classList.add('is-ready'));
 
+    let lastW = w;
     new ResizeObserver(() => {
+      // Mobile browsers resize the page as the address bar shows and hides;
+      // only rebuild when the width really changes.
+      if (host.clientWidth === lastW && Math.abs(host.clientHeight - h) < 120) return;
+      lastW = host.clientWidth;
       resize();
       if (reduce.matches || !raf) draw(0);
     }).observe(host);
@@ -196,18 +235,19 @@ const { density = 1 } = Astro.props;
     });
     mq.addEventListener('change', start);
 
+    window.addEventListener('scroll', () => (scroll = window.scrollY), { passive: true });
+
+    // Only a real mouse or pen steers the current; touches are for scrolling.
     host.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch') return;
+      mouseActive = true;
       const r = host.getBoundingClientRect();
       pointer.tx = e.clientX - r.left;
       pointer.ty = e.clientY - r.top;
-      if (pointer.x < -9000) {
-        pointer.x = pointer.tx;
-        pointer.y = pointer.ty;
-      }
     });
-    host.addEventListener('pointerleave', () => {
-      pointer.tx = -9999;
-      pointer.ty = -9999;
+    host.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'touch') return;
+      mouseActive = false;
     });
   }
 </script>

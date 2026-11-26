@@ -43,5 +43,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body>
     <a class="skip no-print" href="#main">Skip to content</a>
     <slot />
+    <script>
+      // Reveal on scroll: [data-r] blocks and [data-reveal] figures get .in-view once.
+      if (document.documentElement.classList.contains('can-reveal')) {
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('in-view');
+                io.unobserve(e.target);
+              }
+            }),
+          { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+        );
+        document.querySelectorAll('[data-r], [data-reveal]').forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>

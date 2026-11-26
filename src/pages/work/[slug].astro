@@ -40,10 +40,10 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
   </div>
 
   <main id="main" class="wrap case" data-track={w.track}>
-    {w.slug === 'calibration-co-pilot' && <div class="figure" data-reveal><CalibrationFigure /></div>}
+    {w.slug === 'calibration-co-pilot' && <div class="figure"><CalibrationFigure /></div>}
 
     <div class="body">
-      <section aria-labelledby="what">
+      <section aria-labelledby="what" data-r>
         <h2 id="what">What I did</h2>
         <ul class="steps">
           {w.points.map((p) => <li><p>{p}</p></li>)}
@@ -51,7 +51,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
         {w.note && <p class="note">{w.note}</p>}
       </section>
 
-      <aside class="facts" aria-label="Details">
+      <aside class="facts" aria-label="Details" data-r style="--i:2">
         <dl>
           <div>
             <dt>Stack</dt>
@@ -75,27 +75,13 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
       </aside>
     </div>
 
-    <a class="next no-print" href={url(`work/${next.slug}/`)}>
+    <a data-r class="next no-print" href={url(`work/${next.slug}/`)}>
       <span>Next</span>
       <strong>{next.title}</strong>
       <Arrow />
     </a>
   </main>
 </Base>
-
-<script>
-  const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.querySelector('.fig')?.classList.add('in-view');
-          io.unobserve(e.target);
-        }
-      }),
-    { threshold: 0.2 },
-  );
-  document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
-</script>
 
 <style>
   .top {

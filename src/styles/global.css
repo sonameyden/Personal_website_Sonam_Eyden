@@ -64,6 +64,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
@@ -146,6 +147,7 @@ canvas {
   margin: -1px;
   overflow: hidden;
   clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }
@@ -224,6 +226,30 @@ canvas {
   }
 }
 
+/* Scroll reveal: content is visible by default; it only starts hidden once JS
+   has confirmed it can reveal it (html.can-reveal), and never under reduced motion. */
+html.can-reveal [data-r] {
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out),
+    filter 0.9s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+html.can-reveal [data-r]:not(.in-view) {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+html.can-reveal [data-r='soft']:not(.in-view) {
+  transform: translateY(12px);
+  filter: blur(6px);
+}
+
+html.can-reveal [data-r='slide']:not(.in-view) {
+  transform: translateX(-18px);
+}
+
 html.still *,
 html.still *::before,
 html.still *::after {
@@ -268,6 +294,12 @@ html.still *::after {
 
   .no-print {
     display: none !important;
+  }
+
+  [data-r] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 
   .section {

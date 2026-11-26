@@ -61,7 +61,8 @@ const { setup, preliminary } = calibration;
     seeds against SCE-UA over one; validation is mixed and more seeds are running.
   </figcaption>
 
-  <table class="visually-hidden">
+  <div class="visually-hidden">
+  <table>
     <caption>Calibration NSE values</caption>
     <thead><tr><th>Case</th><th>Baseline or SCE-UA</th><th>After fix or co-pilot</th></tr></thead>
     <tbody>
@@ -69,6 +70,7 @@ const { setup, preliminary } = calibration;
       {preliminary.map((r) => <tr><td>{r.gauge}, preliminary</td><td>{r.sceua}</td><td>{r.copilot}</td></tr>)}
     </tbody>
   </table>
+  </div>
 </figure>
 
 <style>

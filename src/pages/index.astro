@@ -45,14 +45,14 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
 
   <main id="main">
     <section class="work wrap" id="work" aria-labelledby="work-title">
-      <div class="section-head">
+      <div class="section-head" data-r="soft">
         <h2 id="work-title">Selected work</h2>
         <p>Each piece of work with the number that shows it worked.</p>
       </div>
       <ol class="ledger">
         {
-          work.map((w) => (
-            <li>
+          work.map((w, i) => (
+            <li data-r style={`--i:${i}`}>
               <a class="row" href={url(`work/${w.slug}/`)} data-track={w.track}>
                 <div class="what">
                   <h3>{w.title}</h3>
@@ -75,12 +75,12 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     </section>
 
     <section class="section research wrap" id="research" aria-labelledby="research-title">
-      <div class="section-head">
+      <div class="section-head" data-r="soft">
         <h2 id="research-title">Research</h2>
         <p>LLM- and agent-guided optimisation of scientific models; NLP for low-resource languages; ML for climate hazards.</p>
       </div>
       <div class="research-grid">
-        <div class="prose">
+        <div class="prose" data-r>
           <h3>Can domain knowledge make hydrological calibration more efficient and physically meaningful?</h3>
           <p>
             Calibration methods such as SCE-UA search on objective scores alone, and different parameter sets can fit
@@ -93,11 +93,11 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
         <CalibrationFigure />
       </div>
 
-      <h3 class="sub" id="publications">Publications and talks</h3>
+      <h3 class="sub" id="publications" data-r="soft">Publications and talks</h3>
       <ul class="pubs">
         {
-          publications.map((p) => (
-            <li>
+          publications.map((p, i) => (
+            <li data-r style={`--i:${i}`}>
               <h4>{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h4>
               <p>{p.venue}</p>
               <p class="also">
@@ -111,14 +111,14 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     </section>
 
     <section class="section wrap" id="experience" aria-labelledby="experience-title">
-      <div class="section-head">
+      <div class="section-head" data-r="soft">
         <h2 id="experience-title">Experience</h2>
         <p>Engineering contracts and research, alongside full-time study.</p>
       </div>
       <ol class="timeline">
         {
-          experience.map((r) => (
-            <li data-track={r.track}>
+          experience.map((r, i) => (
+            <li data-track={r.track} data-r="slide" style={`--i:${i % 3}`}>
               <span class="when">{r.period}</span>
               <div>
                 <h3>{r.title}</h3>
@@ -132,13 +132,13 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     </section>
 
     <section class="section wrap" aria-labelledby="more-title">
-      <div class="section-head">
+      <div class="section-head" data-r="soft">
         <h2 id="more-title">More projects</h2>
       </div>
       <ul class="more-list">
         {
-          moreProjects.map((p) => (
-            <li>
+          moreProjects.map((p, i) => (
+            <li data-r style={`--i:${i}`}>
               <span class="year">{p.year}</span>
               <div>
                 <h3>{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h3>
@@ -152,11 +152,11 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
 
     <section class="section wrap split" aria-label="Skills and education">
       <div>
-        <h2 class="h2">Skills</h2>
+        <h2 class="h2" data-r="soft">Skills</h2>
         <dl class="skills">
           {
-            skills.map((g) => (
-              <div>
+            skills.map((g, i) => (
+              <div data-r style={`--i:${i}`}>
                 <dt>{g.group}</dt>
                 <dd>{g.items.join(' · ')}</dd>
               </div>
@@ -165,8 +165,8 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
         </dl>
       </div>
       <div>
-        <h2 class="h2">Education</h2>
-        <div class="edu">
+        <h2 class="h2" data-r="soft">Education</h2>
+        <div class="edu" data-r style="--i:1">
           <h3>{education.degree}</h3>
           <p class="org">{education.school}</p>
           <p class="when">{education.period}</p>
@@ -176,7 +176,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     </section>
   </main>
 
-  <footer class="contact wrap" id="contact">
+  <footer class="contact wrap" id="contact" data-r>
     <h2>Get in touch</h2>
     <p>Open to research internships and AI engineering roles.</p>
     <a class="mail" href={`mailto:${person.email}`}>{person.email}</a>
@@ -192,18 +192,6 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
   document.querySelectorAll<HTMLButtonElement>('[data-print]').forEach((b) =>
     b.addEventListener('click', () => window.print()),
   );
-
-  const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in-view');
-          io.unobserve(e.target);
-        }
-      }),
-    { threshold: 0.2 },
-  );
-  document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
 </script>
 
 <style>

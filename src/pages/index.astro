@@ -295,7 +295,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     align-items: center;
     gap: 0.35em;
     font: inherit;
-    font-size: 0.9875rem;
+    font-size: 0.9375rem;
     color: var(--text);
     text-decoration: none;
     background: none;
@@ -383,7 +383,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     padding: var(--space-5) var(--space-4);
     margin-inline: calc(-1 * var(--space-4));
     border-top: 1px solid var(--line);
-    border-radius: 6px;
+    border-radius: var(--radius);
     text-decoration: none;
     transition: background-color 0.3s var(--ease-out);
   }
@@ -431,7 +431,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
   .what p {
     margin-top: var(--space-1);
     color: var(--muted);
-    font-size: 0.9875rem;
+    font-size: 0.9375rem;
     max-width: 62ch;
   }
 
@@ -591,6 +591,13 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
     }
   }
 
+  /* Scroll-linked animation ignores duration, so switch it off explicitly. */
+  @media (prefers-reduced-motion: reduce) {
+    .timeline::after {
+      animation: none;
+    }
+  }
+
   .timeline li {
     position: relative;
     display: grid;
@@ -707,13 +714,13 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
 
   .skills dt {
     color: var(--faint);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     padding-top: 0.1rem;
   }
 
   .skills dd {
     color: var(--text);
-    font-size: 0.9875rem;
+    font-size: 0.9375rem;
   }
 
   .edu {

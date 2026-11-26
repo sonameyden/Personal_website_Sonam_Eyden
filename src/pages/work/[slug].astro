@@ -329,6 +329,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
   }
 
   .links a:hover::after,
+  .links a:focus-visible::after,
   .next:hover::after,
   .next:focus-visible::after {
     transform: scaleX(1);
@@ -352,7 +353,7 @@ const trackName = { research: 'Research', engineering: 'Engineering' } as const;
 
   .next span {
     color: var(--faint);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
 
   .next strong {

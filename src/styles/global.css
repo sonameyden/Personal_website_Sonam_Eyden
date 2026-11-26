@@ -76,7 +76,7 @@ body {
 
 ::selection {
   background: color-mix(in oklab, var(--violet) 45%, var(--bg));
-  color: #fff;
+  color: var(--text);
 }
 
 h1,

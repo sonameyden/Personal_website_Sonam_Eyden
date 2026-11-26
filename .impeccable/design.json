@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-26T08:50:03.064Z",
+  "title": "Design System: Sonam Eyden",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Midnight Navy",
+        "canonical": "#0b1020",
+        "printValue": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.017 269.6)",
+          "oklch(26% 0.022 269.6)",
+          "oklch(37% 0.026 269.6)",
+          "oklch(48% 0.031 269.6)",
+          "oklch(60% 0.032 269.6)",
+          "oklch(72% 0.027 269.6)",
+          "oklch(84% 0.022 269.6)",
+          "oklch(95% 0.017 269.6)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Deep Indigo",
+        "canonical": "#111831",
+        "printValue": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.025 270.0)",
+          "oklch(26% 0.032 270.0)",
+          "oklch(37% 0.039 270.0)",
+          "oklch(48% 0.046 270.0)",
+          "oklch(60% 0.047 270.0)",
+          "oklch(72% 0.039 270.0)",
+          "oklch(84% 0.032 270.0)",
+          "oklch(95% 0.025 270.0)"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Raised Indigo",
+        "canonical": "#161f3d",
+        "printValue": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.029 269.3)",
+          "oklch(26% 0.037 269.3)",
+          "oklch(37% 0.045 269.3)",
+          "oklch(48% 0.053 269.3)",
+          "oklch(60% 0.055 269.3)",
+          "oklch(72% 0.046 269.3)",
+          "oklch(84% 0.037 269.3)",
+          "oklch(95% 0.029 269.3)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#222c4c",
+        "printValue": "#ccc",
+        "tonalRamp": [
+          "oklch(15% 0.029 269.5)",
+          "oklch(26% 0.038 269.5)",
+          "oklch(37% 0.046 269.5)",
+          "oklch(48% 0.054 269.5)",
+          "oklch(60% 0.056 269.5)",
+          "oklch(72% 0.047 269.5)",
+          "oklch(84% 0.038 269.5)",
+          "oklch(95% 0.029 269.5)"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "#34416b",
+        "printValue": "#999",
+        "tonalRamp": [
+          "oklch(15% 0.036 269.7)",
+          "oklch(26% 0.047 269.7)",
+          "oklch(37% 0.057 269.7)",
+          "oklch(48% 0.067 269.7)",
+          "oklch(60% 0.069 269.7)",
+          "oklch(72% 0.058 269.7)",
+          "oklch(84% 0.047 269.7)",
+          "oklch(95% 0.036 269.7)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Soft White",
+        "canonical": "#e7ebf6",
+        "printValue": "#111",
+        "tonalRamp": [
+          "oklch(15% 0.008 270.0)",
+          "oklch(26% 0.010 270.0)",
+          "oklch(37% 0.012 270.0)",
+          "oklch(48% 0.014 270.0)",
+          "oklch(60% 0.014 270.0)",
+          "oklch(72% 0.012 270.0)",
+          "oklch(84% 0.010 270.0)",
+          "oklch(95% 0.008 270.0)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "#a1abc7",
+        "printValue": "#333",
+        "tonalRamp": [
+          "oklch(15% 0.021 269.8)",
+          "oklch(26% 0.026 269.8)",
+          "oklch(37% 0.032 269.8)",
+          "oklch(48% 0.038 269.8)",
+          "oklch(60% 0.039 269.8)",
+          "oklch(72% 0.033 269.8)",
+          "oklch(84% 0.026 269.8)",
+          "oklch(95% 0.021 269.8)"
+        ]
+      },
+      "faint": {
+        "role": "neutral",
+        "displayName": "Dusk",
+        "canonical": "#7d88a8",
+        "printValue": "#555",
+        "tonalRamp": [
+          "oklch(15% 0.025 270.1)",
+          "oklch(26% 0.032 270.1)",
+          "oklch(37% 0.039 270.1)",
+          "oklch(48% 0.046 270.1)",
+          "oklch(60% 0.047 270.1)",
+          "oklch(72% 0.039 270.1)",
+          "oklch(84% 0.032 270.1)",
+          "oklch(95% 0.025 270.1)"
+        ]
+      },
+      "aqua": {
+        "role": "primary",
+        "displayName": "Measurement Aqua",
+        "canonical": "#5ee0d0",
+        "printValue": "#0b6e66",
+        "tonalRamp": [
+          "oklch(15% 0.057 184.2)",
+          "oklch(26% 0.074 184.2)",
+          "oklch(37% 0.090 184.2)",
+          "oklch(48% 0.106 184.2)",
+          "oklch(60% 0.109 184.2)",
+          "oklch(72% 0.091 184.2)",
+          "oklch(84% 0.074 184.2)",
+          "oklch(95% 0.057 184.2)"
+        ]
+      },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Engineering Blue",
+        "canonical": "#7aa0ff",
+        "printValue": "#1f4fd1",
+        "tonalRamp": [
+          "oklch(15% 0.071 266.3)",
+          "oklch(26% 0.092 266.3)",
+          "oklch(37% 0.112 266.3)",
+          "oklch(48% 0.132 266.3)",
+          "oklch(60% 0.136 266.3)",
+          "oklch(72% 0.114 266.3)",
+          "oklch(84% 0.092 266.3)",
+          "oklch(95% 0.071 266.3)"
+        ]
+      },
+      "violet": {
+        "role": "tertiary",
+        "displayName": "Research Violet",
+        "canonical": "#b7a0ff",
+        "printValue": "#5b3fc4",
+        "tonalRamp": [
+          "oklch(15% 0.066 294.1)",
+          "oklch(26% 0.085 294.1)",
+          "oklch(37% 0.104 294.1)",
+          "oklch(48% 0.123 294.1)",
+          "oklch(60% 0.126 294.1)",
+          "oklch(72% 0.106 294.1)",
+          "oklch(84% 0.085 294.1)",
+          "oklch(95% 0.066 294.1)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The owner's name in the home hero; once per site."
+      },
+      "display-case": {
+        "displayName": "Display Case",
+        "purpose": "Work title at the top of each case page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section heads."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Ledger row titles, research question, case-page section heads, the Next title; the hero role line at weight 500."
+      },
+      "title-sm": {
+        "displayName": "Title Small",
+        "purpose": "Timeline roles, more-projects titles, degree, publications subhead."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy; prose capped at 68ch."
+      },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Secondary lines: orgs, venues, experience lines, case bylines and facts, nav."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Dates, periods, years, result labels, fact terms; sentence case, tabular figures."
+      },
+      "measure": {
+        "displayName": "Measure",
+        "purpose": "Ledger result value, aqua, Geist Mono."
+      },
+      "measure-lg": {
+        "displayName": "Measure Large",
+        "purpose": "Case-page result value, aqua, Geist Mono."
+      },
+      "measure-sm": {
+        "displayName": "Measure Small",
+        "purpose": "Chart dot values; axis ticks use mono at 0.75rem."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The single easing for every transition and animation (--ease-out)."
+      },
+      {
+        "name": "color-shift",
+        "value": "0.2s",
+        "purpose": "Nav link and ruled-link border colour changes."
+      },
+      {
+        "name": "wash",
+        "value": "0.3s",
+        "purpose": "Ledger row hover wash; primary pill fill and border."
+      },
+      {
+        "name": "nudge",
+        "value": "0.25s to 0.35s",
+        "purpose": "Arrow icon moving 2-3px up-right on hover."
+      },
+      {
+        "name": "hairline-draw",
+        "value": "0.6s",
+        "purpose": "1px blend hairline scaling in from the left on hover or focus."
+      },
+      {
+        "name": "hero-rise",
+        "value": "1s, 80ms stagger",
+        "purpose": "One entrance: hero intro elements rise 14px out of a 6px blur; the case header does the same once at 0.9s."
+      },
+      {
+        "name": "chart-settle",
+        "value": "1.1s, 0.3s to 0.35s delay",
+        "purpose": "Calibration chart span lines grow and dots slide in 24px on view."
+      },
+      {
+        "name": "flow-fade",
+        "value": "1.6s",
+        "purpose": "Flow-field canvas fading in after its first draw."
+      },
+      {
+        "name": "timeline-fill",
+        "value": "scroll-driven, view() entry 20% to cover 70%",
+        "purpose": "Blue timeline line filling downward with scroll where supported."
+      },
+      {
+        "name": "still",
+        "value": "prefers-reduced-motion or ?still",
+        "purpose": "All motion resolves to the final drawn state; the flow field draws one still frame at 30% line opacity."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "720px"
+      },
+      {
+        "name": "stack",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single filled action (Email me): raised indigo pill whose border becomes the blend on hover or focus.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Email me <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 11 11 5M6 5h5v5\"/></svg></a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); font-size: 0.9875rem; color: var(--text, #e7ebf6); text-decoration: none; padding: 0.6rem 1.05rem; border: 1px solid color-mix(in oklab, var(--aqua, #5ee0d0) 50%, var(--line-strong, #34416b)); border-radius: 999px; background: var(--surface-2, #161f3d); transition: background 0.3s, border-color 0.3s; } .ds-btn-primary svg { width: 0.85em; height: 0.85em; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover, .ds-btn-primary:focus-visible { border-color: transparent; background: linear-gradient(color-mix(in oklab, var(--surface-2, #161f3d) 78%, var(--blue, #7aa0ff)), color-mix(in oklab, var(--surface-2, #161f3d) 78%, var(--blue, #7aa0ff))) padding-box, linear-gradient(90deg, var(--aqua, #5ee0d0), var(--blue, #7aa0ff) 50%, var(--violet, #b7a0ff)) border-box; } .ds-btn-primary:hover svg { transform: translate(2px, -2px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--aqua, #5ee0d0); outline-offset: 3px; }"
+    },
+    {
+      "name": "Ruled Link",
+      "kind": "button",
+      "refersTo": "link-ruled",
+      "description": "Secondary contact actions: unboxed text with a strong-hairline bottom border that turns aqua on hover.",
+      "html": "<a class=\"ds-link-ruled\" href=\"#\">GitHub <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 11 11 5M6 5h5v5\"/></svg></a>",
+      "css": ".ds-link-ruled { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); font-size: 0.9875rem; color: var(--text, #e7ebf6); text-decoration: none; padding: 0.35rem 0; border-bottom: 1px solid var(--line-strong, #34416b); transition: border-color 0.2s; } .ds-link-ruled svg { width: 0.85em; height: 0.85em; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); } .ds-link-ruled:hover { border-color: var(--aqua, #5ee0d0); } .ds-link-ruled:hover svg { transform: translate(2px, -2px); } .ds-link-ruled:focus-visible { outline: 2px solid var(--aqua, #5ee0d0); outline-offset: 3px; border-radius: 4px; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Name on the left in soft white; muted section links on the right that brighten on hover.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-home\" href=\"#\">Sonam Eyden</a><ul><li><a href=\"#\">Work</a></li><li><a href=\"#\">Research</a></li><li><a href=\"#\">Experience</a></li><li><a href=\"#\">Contact</a></li></ul></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 1rem; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); font-size: 0.9375rem; background: var(--bg, #0b1020); } .ds-nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; } .ds-nav a { color: var(--muted, #a1abc7); text-decoration: none; transition: color 0.2s; } .ds-nav a:hover, .ds-nav .ds-nav-home { color: var(--text, #e7ebf6); } .ds-nav .ds-nav-home { font-weight: 600; } .ds-nav a:focus-visible { outline: 2px solid var(--aqua, #5ee0d0); outline-offset: 3px; border-radius: 4px; }"
+    },
+    {
+      "name": "Ledger Row",
+      "kind": "custom",
+      "refersTo": "ledger-row",
+      "description": "Signature work entry: a ruled row ending in its measured result in aqua mono; hover washes the row and draws the blend hairline.",
+      "html": "<ol class=\"ds-ledger\"><li><a class=\"ds-row\" href=\"#\"><div class=\"ds-what\"><h3>Calibration co-pilot</h3><p>LLM-guided calibration of a basin hydrology model.</p><p class=\"ds-byline\"><span class=\"ds-track ds-track-research\">Research</span><span class=\"ds-period\">2025 to now</span></p></div><div class=\"ds-result\"><span class=\"ds-value\">0.747 → 0.861</span><span class=\"ds-label\">calibration NSE after fixing model set-up</span></div><span class=\"ds-go\" aria-hidden=\"true\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 11 11 5M6 5h5v5\"/></svg></span></a></li></ol>",
+      "css": ".ds-ledger { list-style: none; margin: 0; padding: 0 1rem; border-bottom: 1px solid var(--line, #222c4c); background: var(--bg, #0b1020); font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); color: var(--text, #e7ebf6); } .ds-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, 17rem) 1.5rem; align-items: center; gap: 2rem; padding: 1.5rem 1rem; margin-inline: -1rem; border-top: 1px solid var(--line, #222c4c); border-radius: 6px; color: inherit; text-decoration: none; transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-row::after { content: ''; position: absolute; left: 1rem; right: 1rem; bottom: -1px; height: 1px; background: linear-gradient(90deg, var(--aqua, #5ee0d0), var(--blue, #7aa0ff) 50%, var(--violet, #b7a0ff)); transform: scaleX(0); transform-origin: left; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); } .ds-row:hover { background: color-mix(in oklab, var(--surface, #111831) 80%, transparent); } .ds-row:hover::after, .ds-row:focus-visible::after { transform: scaleX(1); } .ds-row:focus-visible { outline: 2px solid var(--aqua, #5ee0d0); outline-offset: 3px; } .ds-what h3 { margin: 0; font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; } .ds-what p { margin: 0.25rem 0 0; color: var(--muted, #a1abc7); font-size: 0.9875rem; } .ds-what .ds-byline { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; } .ds-track { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; } .ds-track::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; } .ds-track-research { color: var(--violet, #b7a0ff); } .ds-period { font-size: 0.8125rem; color: var(--faint, #7d88a8); font-variant-numeric: tabular-nums; } .ds-result { display: grid; gap: 0.15rem; } .ds-value { font-family: var(--font-mono, 'Geist Mono Variable', ui-monospace, monospace); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem); font-weight: 500; color: var(--aqua, #5ee0d0); white-space: nowrap; } .ds-label { font-size: 0.8125rem; color: var(--muted, #a1abc7); line-height: 1.4; } .ds-go { color: var(--faint, #7d88a8); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s; } .ds-go svg { width: 1.1rem; height: 1.1rem; display: block; } .ds-row:hover .ds-go { color: var(--aqua, #5ee0d0); transform: translate(3px, -3px); }"
+    },
+    {
+      "name": "Track Label",
+      "kind": "chip",
+      "refersTo": "track-label-engineering",
+      "description": "Dot plus word in the track colour: blue for engineering, violet for research. Sentence case, inline in bylines.",
+      "html": "<p class=\"ds-tracks\"><span class=\"ds-track-label ds-eng\">Engineering</span><span class=\"ds-track-label ds-res\">Research</span></p>",
+      "css": ".ds-tracks { display: flex; gap: 1rem; margin: 0; padding: 0.5rem 1rem; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); background: var(--bg, #0b1020); } .ds-track-label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; white-space: nowrap; } .ds-track-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; } .ds-eng { color: var(--blue, #7aa0ff); } .ds-res { color: var(--violet, #b7a0ff); }"
+    },
+    {
+      "name": "Figure Panel",
+      "kind": "card",
+      "refersTo": "figure-panel",
+      "description": "The one contained block: a deep-indigo panel with a hairline border and 10px radius holding ruled dot-plot rows.",
+      "html": "<figure class=\"ds-fig\"><div class=\"ds-fig-row\"><div class=\"ds-fig-label\"><span>Gauge A</span><small>model set-up fixed</small></div><div class=\"ds-lane\"><span class=\"ds-span\" style=\"left:19%;width:45%\"></span><span class=\"ds-dot ds-base\" style=\"left:19%\"><b>0.747</b></span><span class=\"ds-dot ds-aqua\" style=\"left:64%\"><b>0.861</b></span></div></div><figcaption>Calibration NSE (higher is better).</figcaption></figure>",
+      "css": ".ds-fig { margin: 0; background: var(--surface, #111831); border: 1px solid var(--line, #222c4c); border-radius: 10px; padding: 2rem 2rem 1.5rem; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); color: var(--text, #e7ebf6); } .ds-fig-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); align-items: center; gap: 1rem; min-height: 4.25rem; } .ds-fig-label { display: grid; line-height: 1.3; } .ds-fig-label small { color: var(--faint, #7d88a8); font-size: 0.8125rem; } .ds-lane { position: relative; height: 2.5rem; margin-inline: 1.25rem; } .ds-span { position: absolute; top: 50%; height: 2px; margin-top: -1px; background: var(--line-strong, #34416b); } .ds-dot { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; } .ds-base { border: 2px solid var(--muted, #a1abc7); background: var(--surface, #111831); } .ds-aqua { background: var(--aqua, #5ee0d0); } .ds-dot b { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); font-family: var(--font-mono, 'Geist Mono Variable', ui-monospace, monospace); font-variant-numeric: tabular-nums; font-size: 0.8125rem; font-weight: 500; color: var(--text, #e7ebf6); white-space: nowrap; } .ds-base b { color: var(--muted, #a1abc7); } .ds-fig figcaption { margin-top: 1rem; color: var(--faint, #7d88a8); font-size: 0.875rem; line-height: 1.55; }"
+    },
+    {
+      "name": "Research Note",
+      "kind": "card",
+      "refersTo": "note-research",
+      "description": "A contained caveat on research case pages: violet-tinted ground and border, 10px radius.",
+      "html": "<p class=\"ds-note\">Preliminary: validation is mixed and more seeds are running.</p>",
+      "css": ".ds-note { margin: 0; padding: 1rem 1.5rem; border: 1px solid color-mix(in oklab, var(--violet, #b7a0ff) 35%, var(--line, #222c4c)); background: color-mix(in oklab, var(--violet, #b7a0ff) 7%, var(--bg, #0b1020)); border-radius: 10px; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.65; color: var(--text, #e7ebf6); }"
+    },
+    {
+      "name": "Experience Timeline",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "A hairline track with a blue scroll fill, hollow nodes ringed in the track colour, and dates in the shared 9.5rem column.",
+      "html": "<ol class=\"ds-timeline\"><li><span class=\"ds-when\">2025 to now</span><div><h3>AI engineer (contract)</h3><p class=\"ds-org\">Organisation</p><p class=\"ds-line\">One line on what was built and measured.</p></div></li><li class=\"ds-research\"><span class=\"ds-when\">2024</span><div><h3>Research intern</h3><p class=\"ds-org\">Organisation</p><p class=\"ds-line\">One line on the research.</p></div></li></ol>",
+      "css": ".ds-timeline { position: relative; list-style: none; margin: 0; padding: 0 1rem 0 2rem; font-family: var(--font-sans, 'Geist Variable', system-ui, sans-serif); color: var(--text, #e7ebf6); background: var(--bg, #0b1020); } .ds-timeline::before { content: ''; position: absolute; left: 4px; top: 0.6rem; bottom: 0.6rem; width: 1px; background: var(--blue, #7aa0ff); } .ds-timeline li { position: relative; display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1rem; } .ds-timeline li::before { content: ''; position: absolute; left: -2rem; top: 1.35rem; width: 9px; height: 9px; border-radius: 50%; background: var(--bg, #0b1020); border: 2px solid var(--blue, #7aa0ff); z-index: 1; } .ds-timeline li.ds-research::before { border-color: var(--violet, #b7a0ff); } .ds-when { font-size: 0.8125rem; color: var(--faint, #7d88a8); padding-top: 0.3rem; font-variant-numeric: tabular-nums; } .ds-timeline h3 { margin: 0; font-size: 1.25rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; } .ds-org { margin: 0.15rem 0 0; font-size: 0.9375rem; opacity: 0.85; } .ds-line { margin: 0.25rem 0 0; font-size: 0.9375rem; color: var(--muted, #a1abc7); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Midnight Ledger",
+    "overview": "The site is a ledger of measured outcomes laid on a calm midnight field. Each piece of work is a ruled row that ends in its number, and that number is set in mono and coloured aqua, because it is a measurement. Everything around the numbers stays quiet: a navy ground, three close tonal steps of indigo, soft white text, and 1px rules that divide content instead of boxing it. The one expressive material is a fine field of streamlines in an aqua→blue→violet blend that sits behind the top of each page, bends gently around the pointer, and fades out before the content begins.\n\nDensity is moderate and editorial: a 1200px page, generous section breaks (7rem), and tight, consistent rhythm inside sections. Hue carries meaning, not mood. Aqua marks measurements and link affordances, blue marks engineering work, violet marks research. Motion is restrained and exponential: one entrance on load, hairlines that draw in on intent, chart dots that settle on view, a timeline that fills with scroll. Every one of these resolves to a complete still state.\n\nThe system is built to print. A light print palette swaps every colour token, the flow field and navigation are hidden, and external links print their URLs, so the same page serves as a one-page resume.",
+    "keyCharacteristics": [
+      "Midnight navy ground with two indigo surface steps; no light theme on screen.",
+      "Ruled ledger rows, not cards; one shared 9.5rem label column across lists.",
+      "Three role hues: aqua for measurements and links, blue for engineering, violet for research.",
+      "Geist for all text; Geist Mono only for measured numbers.",
+      "The aqua→blue→violet blend appears only as moving line: the flow field and 1px hairlines drawn in on hover or focus.",
+      "Flat: no shadows, no glow; depth comes from tonal steps, hairlines and a masked canvas layer.",
+      "Exponential ease-out motion that is fully still under reduced motion and in print."
+    ],
+    "rules": [
+      {
+        "name": "The Three Roles Rule",
+        "body": "Aqua means measured or clickable, blue means engineering, violet means research. A new element takes an accent only if it carries one of those meanings; otherwise it is neutral.",
+        "section": "colors"
+      },
+      {
+        "name": "The Blend Is Motion Rule",
+        "body": "The aqua→blue→violet blend (`--flow`) is only ever a line that moves or draws: the flow-field streamlines and 1px hairlines that scale in from the left on hover or focus (ledger rows, ruled links, the contact email, \"Next\", and the primary pill's border). It is never a fill, a text colour, or a resting state.",
+        "section": "colors"
+      },
+      {
+        "name": "The Print Swap Rule",
+        "body": "Every colour is a custom property, and the print stylesheet redefines all of them to a light palette (white ground, near-black text, darkened aqua, blue and violet). New colour use goes through the tokens so it prints.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Means Measured Rule",
+        "body": "Geist Mono is reserved for numbers that are measurements: results, chart values, axis ticks. Dates and periods are not measurements; they stay in Geist with tabular figures.",
+        "section": "typography"
+      },
+      {
+        "name": "The Weight Ladder Rule",
+        "body": "Three weights only: 600 for headings, 500 for the role line, values and publication titles, 400 for everything else.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ledger Rule",
+        "body": "Peer items are ruled rows divided by 1px `line` borders, never a grid of cards. Rows that link get the full-row hover wash and the drawn hairline.",
+        "section": "layout"
+      },
+      {
+        "name": "The Shared Column Rule",
+        "body": "Any label-plus-content list uses the 9.5rem label column, so dates, years and group names align down the page.",
+        "section": "layout"
+      },
+      {
+        "name": "The Hairline, Not Shadow Rule",
+        "body": "Separation and emphasis use a 1px rule or a tonal step. No shadows, no glow, no blurred halos.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put every result in Geist Mono, aqua, with tabular figures, and its label in muted sentence case beneath it.",
+      "Do divide peer items with 1px `line` rules and align their labels in the 9.5rem column.",
+      "Do colour track markers by meaning only: blue for engineering, violet for research.",
+      "Do use the aqua→blue→violet blend only as a 1px line drawn in from the left on hover or focus, or in the flow field.",
+      "Do use cubic-bezier(0.16, 1, 0.3, 1) for every transition, and make every animated element render complete under reduced motion and in print.",
+      "Do route every colour through the custom properties so the print palette swap covers it."
+    ],
+    "donts": [
+      "Don't lay out peer items as a grid of cards; the figure panel and research note are the only enclosed blocks.",
+      "Don't fill text, surfaces or buttons with the blend gradient, and don't add glow or box-shadows.",
+      "Don't set prose, dates or labels in Geist Mono.",
+      "Don't open the page with a strip of big standalone numbers; numbers sit in the ledger next to the work they prove.",
+      "Don't add a fourth accent hue or use aqua, blue or violet decoratively.",
+      "Don't uppercase small labels or place a label above a heading."
+    ]
+  }
+}
